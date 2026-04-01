@@ -463,15 +463,54 @@
   .cert-name-input:focus { border-bottom-color: var(--btc-orange); }
 
   @media print {
-    body * { visibility: hidden; }
-    .certificate, .certificate * { visibility: visible; }
+    /* Hide everything except the certificate */
+    body { background: #fff !important; }
+    body::before { display: none !important; }
+    nav, .sidebar, .progress-bar-container, .paywall-overlay,
+    .course-content, .cert-actions, .quiz-section, .cta-banner,
+    .lesson, .quiz-btn, .scroll-progress, .pdf-download-banner { display: none !important; }
+
+    .certificate-container { display: block !important; }
+    .certificate-container.show { display: block !important; }
+
     .certificate {
-      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      width: 700px; background: #1a1712 !important;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
-      border: 3px solid #F7931A !important; box-shadow: none !important;
+      display: block !important;
+      visibility: visible !important;
+      position: relative !important;
+      width: 700px !important;
+      margin: 0 auto !important;
+      padding: 3rem !important;
+      background: #1a1712 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      border: 3px solid #F7931A !important;
+      border-radius: 16px !important;
+      box-shadow: none !important;
     }
-    .cert-actions, .quiz-btn, nav, .sidebar, .progress-bar-container, .paywall-overlay { display: none !important; }
+    .certificate * {
+      visibility: visible !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .cert-badge { font-size: 2.5rem !important; }
+    .cert-pre { color: #8A8697 !important; }
+    .cert-title {
+      background: none !important;
+      -webkit-text-fill-color: #F7931A !important;
+      color: #F7931A !important;
+    }
+    .cert-course { color: #F0EDE6 !important; }
+    .cert-name-input {
+      border: none !important;
+      color: #F7931A !important;
+      background: transparent !important;
+      font-size: 1.5rem !important;
+      text-align: center !important;
+    }
+    .cert-date, .cert-id { color: #8A8697 !important; }
+    .cert-score { color: #00D68F !important; }
   }
 
   /* ── RESPONSIVE ── */
@@ -501,15 +540,17 @@
       <li><span class="check">✓</span> Intermediate Certificate on completion</li>
       <li><span class="check">✓</span> Lifetime access — learn at your own pace</li>
     </ul>
-    <div class="paywall-price">$19</div>
-    <p class="paywall-price-note">One-time payment · Lifetime access · No subscription</p>
+    <div class="paywall-price">$19 USD</div>
+    <p class="paywall-price-note">One-time payment · Lifetime access · No subscription · All prices in USD</p>
     <div class="paywall-methods">
-      <button class="pay-btn pay-btn-btc" onclick="unlockCourse()">₿ Pay with Bitcoin</button>
-      <button class="pay-btn pay-btn-ln" onclick="unlockCourse()">⚡ Lightning</button>
-      <button class="pay-btn pay-btn-card" onclick="unlockCourse()">💳 Card</button>
+      <button class="pay-btn pay-btn-btc" onclick="payWithBTCPay()">₿ Pay with Bitcoin</button>
+      <button class="pay-btn pay-btn-ln" onclick="payWithBTCPay()">⚡ Pay with Lightning</button>
+      <button class="pay-btn pay-btn-card" disabled style="opacity:0.5;cursor:default;">💳 Card — Coming Soon</button>
+    </div>
+    <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:0.6rem;">
+      <button class="pay-btn pay-btn-card" disabled style="opacity:0.5;cursor:default;">🅿️ PayPal — Coming Soon</button>
     </div>
     <p class="paywall-guarantee">🔒 30-day money-back guarantee · Secure payment</p>
-    <button class="paywall-skip" onclick="unlockCourse()">Preview for free (demo mode)</button>
   </div>
 </div>
 
@@ -547,6 +588,15 @@
   </aside>
 
   <main class="main-content">
+
+    <!-- PDF DOWNLOAD BANNER (only visible when unlocked) -->
+    <div class="pdf-download-banner" id="pdfBanner" style="display:none; background: linear-gradient(135deg, rgba(247, 147, 26, 0.08), rgba(255, 184, 0, 0.04)); border: 1px solid rgba(247, 147, 26, 0.2); border-radius: 16px; padding: 1.2rem 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      <div>
+        <strong style="color: var(--btc-orange);">📄 Course PDF Companion</strong>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.3rem;">Download the complete Going Deeper course as a printable PDF.</p>
+      </div>
+      <a href="Course-Module-02-Going-Deeper.pdf" download class="pay-btn pay-btn-btc" style="text-decoration:none; font-size: 0.85rem; padding: 0.7rem 1.4rem;">⬇ Download PDF</a>
+    </div>
 
     <!-- LESSON 1 -->
     <div class="lesson reveal" id="lesson1">
@@ -808,9 +858,37 @@
 
 <script>
   // ── PAYWALL ──
+  // Auto-unlock if redirected from BTCPay with ?access=paid
+  function showPdfBanner() {
+    var b = document.getElementById('pdfBanner');
+    if (b) b.style.display = 'flex';
+  }
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('access') === 'paid') {
+      document.getElementById('paywall').classList.add('hidden');
+      showPdfBanner();
+      // Store access so they don't lose it on page refresh
+      try { sessionStorage.setItem('btcacademy_intermediate', 'paid'); } catch(e) {}
+    } else {
+      // Check if they already unlocked this session
+      try {
+        if (sessionStorage.getItem('btcacademy_intermediate') === 'paid') {
+          document.getElementById('paywall').classList.add('hidden');
+          showPdfBanner();
+        }
+      } catch(e) {}
+    }
+  })();
+
   function unlockCourse() {
     document.getElementById('paywall').classList.add('hidden');
     document.body.style.overflow = '';
+  }
+
+  function payWithBTCPay() {
+    // BTCPay POS — Going Deeper Intermediate ($19 USD)
+    window.open('https://pay.bitcoinacademy.online/apps/26RxY6DTLoZQynmZ2X3jkbFzSZWh/pos', '_blank');
   }
 
   // ── LESSON COMPLETION ──
