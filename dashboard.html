@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Dashboard | Bitcoin Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--o:#F7931A;--g:#FFB800;--dk:#0A0A0F;--sf:#111118;--sl:#1A1A24;--t1:#F0EDE6;--t2:#8A8697;--tm:#5A566A;--gn:#00D68F;--rd:#FF4D6A;--bl:#4A9EFF;--pp:#A855F7;--cy:#22D3EE;--fd:'Anybody',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--dk);color:var(--t1);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#06060A}::-webkit-scrollbar-thumb{background:var(--o);border-radius:3px}
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,10,15,.85);border-bottom:1px solid rgba(247,147,26,.1)}
+.logo{font-family:var(--fd);font-weight:900;font-size:1.4rem;color:var(--o);letter-spacing:-.5px;display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.logo-icon{width:32px;height:32px;background:var(--o);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--dk);font-weight:900}
+.nr{display:flex;align-items:center;gap:1.5rem}
+.nb{color:var(--t2);text-decoration:none;font-size:.85rem;transition:color .3s}.nb:hover{color:var(--o)}
+.ld{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--fm);font-size:.7rem;color:var(--gn);letter-spacing:1px;text-transform:uppercase}
+.ld::before{content:'';width:8px;height:8px;background:var(--gn);border-radius:50%;animation:pu 2s infinite}
+@keyframes pu{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.dash{max-width:1400px;margin:0 auto;padding:5.5rem 2rem 4rem}
+.dh{margin-bottom:2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.dh h1{font-family:var(--fd);font-weight:900;font-size:clamp(1.8rem,3vw,2.5rem);letter-spacing:-1px}
+.dh h1 em{font-style:normal;background:linear-gradient(135deg,var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#lu{font-family:var(--fm);font-size:.7rem;color:var(--tm)}
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.sc{background:var(--sf);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:all .3s;animation:fi .6s ease-out both}
+.sc:hover{border-color:rgba(247,147,26,.15);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--o);opacity:0;transition:opacity .3s}.sc:hover::before{opacity:1}
+.sc:nth-child(1){animation-delay:0s}.sc:nth-child(2){animation-delay:.05s}.sc:nth-child(3){animation-delay:.1s}.sc:nth-child(4){animation-delay:.15s}.sc:nth-child(5){animation-delay:.2s}.sc:nth-child(6){animation-delay:.25s}
+@keyframes fi{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.sl{font-family:var(--fm);font-size:.65rem;color:var(--tm);letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem}
+.sv{font-family:var(--fd);font-weight:900;font-size:1.6rem;letter-spacing:-.5px;line-height:1.2}
+.sch{font-family:var(--fm);font-size:.75rem;margin-top:.3rem}.up{color:var(--gn)}.dn{color:var(--rd)}
+.ss{font-size:.75rem;color:var(--tm);margin-top:.2rem;font-family:var(--fm)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+.cc{background:var(--sf);border:1px solid rgba(255,255,255,.05);border-radius:20px;padding:1.5rem}.fw{grid-column:1/-1}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.ct{font-family:var(--fd);font-weight:700;font-size:1.1rem}
+.cs{font-family:var(--fm);font-size:.7rem;color:var(--tm);letter-spacing:1px}
+.cl{display:flex;gap:1rem;flex-wrap:wrap}.cli{display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--t2)}.cld{width:10px;height:10px;border-radius:50%}
+.cw{position:relative;height:300px}.cwt{position:relative;height:400px}
+.ts{display:flex;gap:.3rem;background:var(--sl);border-radius:8px;padding:3px}
+.tb{font-family:var(--fm);font-size:.7rem;padding:.4rem .8rem;border-radius:6px;border:none;background:transparent;color:var(--tm);cursor:pointer;transition:all .25s;font-weight:500}
+.tb:hover{color:var(--t2)}.tb.a{background:var(--o);color:var(--dk);font-weight:600;box-shadow:0 0 12px rgba(247,147,26,.25)}
+.mi{background:var(--sl);border-radius:12px;padding:1.2rem 1.5rem;margin-top:1rem;font-size:.85rem;color:var(--t2);line-height:1.7}.mi b{color:var(--t1)}
+.mf{font-family:var(--fm);font-size:.8rem;color:var(--o);background:rgba(247,147,26,.08);padding:.5rem 1rem;border-radius:8px;margin:.5rem 0;display:inline-block}
+.hg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:2rem}
+.hc{background:var(--sf);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:1.5rem}
+.hc h3{font-family:var(--fd);font-weight:700;font-size:1rem;margin-bottom:1rem}
+.hbi{margin-bottom:1rem}.hbl{display:flex;justify-content:space-between;margin-bottom:.3rem}
+.hbl span:first-child{font-size:.8rem;color:var(--t2)}.hbl span:last-child{font-family:var(--fm);font-size:.75rem;color:var(--t1)}
+.hb{width:100%;height:6px;background:var(--sl);border-radius:3px;overflow:hidden}.hbf{height:100%;border-radius:3px;transition:width 1s ease}
+.disc{text-align:center;padding:2rem;color:var(--tm);font-size:.75rem;border-top:1px solid rgba(255,255,255,.04);margin-top:2rem}
+@media(max-width:900px){.cg{grid-template-columns:1fr}.sr{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.sr{grid-template-columns:1fr}.dash{padding:5rem 1rem 3rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="bitcoin-education.html" class="logo"><div class="logo-icon">₿</div>Bitcoin <span style="color:var(--t1)">Academy</span></a>
+  <div class="nr"><span class="ld">Live</span><a href="bitcoin-education.html" class="nb">← Home</a></div>
+</nav>
+<div class="dash">
+  <div class="dh"><h1>Bitcoin <em>Dashboard</em></h1><div id="lu">Loading...</div></div>
+
+  <!-- STATS -->
+  <div class="sr">
+    <div class="sc"><div class="sl">💰 Price (USD)</div><div class="sv" id="price">—</div><div class="sch" id="pch">—</div></div>
+    <div class="sc"><div class="sl">📊 Market Cap</div><div class="sv" id="mc">—</div><div class="ss" id="mcr"></div></div>
+    <div class="sc"><div class="sl">📈 24h Volume</div><div class="sv" id="vol">—</div><div class="ss" id="vr"></div></div>
+    <div class="sc"><div class="sl">⛏️ Block Height</div><div class="sv" id="bh">—</div><div class="ss" id="bt"></div></div>
+    <div class="sc"><div class="sl">⚡ Hash Rate</div><div class="sv" id="hr">—</div><div class="ss" id="dif"></div></div>
+    <div class="sc"><div class="sl">🔄 Mempool Fee</div><div class="sv" id="mf">—</div><div class="ss" id="fe"></div></div>
+  </div>
+
+  <div class="cg">
+    <!-- PRICE CHART -->
+    <div class="cc fw">
+      <div class="ch">
+        <div><div class="ct" id="ptitle">Price History (1 Year)</div><div class="cs">USD daily close · CryptoCompare</div></div>
+        <div class="ts" id="ptf">
+          <button class="tb" data-d="7">1W</button><button class="tb" data-d="30">1M</button>
+          <button class="tb" data-d="90">3M</button><button class="tb" data-d="180">6M</button>
+          <button class="tb a" data-d="365">1Y</button><button class="tb" data-d="1825">5Y</button>
+          <button class="tb" data-d="max">ALL</button>
+        </div>
+      </div>
+      <div class="cwt"><canvas id="pcv"></canvas></div>
+    </div>
+
+    <!-- POWER LAW -->
+    <div class="cc fw">
+      <div class="ch">
+        <div><div class="ct" id="pltitle">Power Law Model (All Time)</div><div class="cs">Log scale regression</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.6rem">
+          <div class="ts" id="pltf">
+            <button class="tb" data-d="365">1Y</button><button class="tb" data-d="1825">5Y</button>
+            <button class="tb a" data-d="max">ALL</button>
+          </div>
+          <div class="cl">
+            <div class="cli"><div class="cld" style="background:var(--o)"></div>Price</div>
+            <div class="cli"><div class="cld" style="background:var(--gn)"></div>Fair Value</div>
+            <div class="cli"><div class="cld" style="background:var(--bl);opacity:.4"></div>Support</div>
+            <div class="cli"><div class="cld" style="background:var(--rd);opacity:.4"></div>Resistance</div>
+          </div>
+        </div>
+      </div>
+      <div class="cwt"><canvas id="plcv"></canvas></div>
+      <div class="mi"><b>The Power Law Model</b> — Bitcoin's price follows a power law with time. On a log-log scale, price forms a linear corridor. <div class="mf">Price = 10^(a · log₁₀(days) + b)</div> The support band has never been broken. <b>Note:</b> Descriptive, not predictive.</div>
+    </div>
+
+    <!-- S2F -->
+    <div class="cc">
+      <div class="ch"><div><div class="ct">Stock-to-Flow</div><div class="cs">Scarcity vs Price</div></div></div>
+      <div class="cw"><canvas id="s2fcv"></canvas></div>
+      <div class="mi"><b>Stock-to-Flow</b> — supply / annual production. After 2024 halving, BTC S2F surpassed gold (~120 vs ~62).</div>
+    </div>
+
+    <!-- VALUATION -->
+    <div class="cc">
+      <div class="ch"><div><div class="ct">Valuation Bands</div><div class="cs">200DMA & Mayer Multiple</div></div></div>
+      <div class="cw"><canvas id="vcv"></canvas></div>
+      <div class="mi"><b>Price vs 200-Day MA</b> with Mayer bands (0.8x support, 2.4x overbought).</div>
+    </div>
+
+    <!-- HALVING -->
+    <div class="cc">
+      <div class="ch"><div><div class="ct">Halving Cycle</div><div class="cs">Current epoch</div></div></div>
+      <div class="cw" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem">
+        <canvas id="hrcv" width="180" height="180"></canvas>
+        <div style="text-align:center">
+          <div style="font-family:var(--fd);font-weight:900;font-size:1.4rem" id="hp">—</div>
+          <div style="font-family:var(--fm);font-size:.65rem;color:var(--tm);letter-spacing:1px">THROUGH EPOCH</div>
+          <div style="font-family:var(--fm);font-size:.8rem;color:var(--o);margin-top:.6rem" id="he">—</div>
+          <div style="font-family:var(--fm);font-size:.7rem;color:var(--tm);margin-top:.2rem" id="br">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLY -->
+    <div class="cc">
+      <div class="ch"><div><div class="ct">Supply Distribution</div><div class="cs">21M cap</div></div></div>
+      <div class="cw"><canvas id="spcv"></canvas></div>
+    </div>
+  </div>
+
+  <!-- HEALTH BARS -->
+  <div class="hg">
+    <div class="hc"><h3>⛏️ Mining</h3>
+      <div class="hbi"><div class="hbl"><span>Hash Rate % ATH</span><span id="hrp">—</span></div><div class="hb"><div class="hbf" id="hrb" style="width:0%;background:var(--gn)"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>Difficulty Epoch</span><span id="dp">—</span></div><div class="hb"><div class="hbf" id="dpb" style="width:0%;background:var(--o)"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>Supply Mined</span><span id="sp">—</span></div><div class="hb"><div class="hbf" id="spb" style="width:0%;background:var(--bl)"></div></div></div>
+    </div>
+    <div class="hc"><h3>📡 Network</h3>
+      <div class="hbi"><div class="hbl"><span>Mempool Congestion</span><span id="mcg">—</span></div><div class="hb"><div class="hbf" id="mcb" style="width:0%"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>Next Block Fee</span><span id="nf">—</span></div><div class="hb"><div class="hbf" id="nfb" style="width:0%;background:var(--g)"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>SegWit</span><span>~80%</span></div><div class="hb"><div class="hbf" style="width:80%;background:var(--pp)"></div></div></div>
+    </div>
+    <div class="hc"><h3>💰 Market</h3>
+      <div class="hbi"><div class="hbl"><span>BTC Dominance</span><span id="dom">—</span></div><div class="hb"><div class="hbf" id="dob" style="width:0%;background:var(--o)"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>Fear & Greed</span><span id="fgl">—</span></div><div class="hb"><div class="hbf" id="fgb" style="width:0%"></div></div></div>
+      <div class="hbi"><div class="hbl"><span>Days Since ATH</span><span id="dsa">—</span></div><div class="hb"><div class="hbf" id="dab" style="width:0%;background:var(--cy)"></div></div></div>
+    </div>
+  </div>
+
+  <div class="disc">CryptoCompare · CoinGecko · Mempool.space · Alternative.me — Stats refresh 60s<br>Educational only · Bitcoin Academy © 2026</div>
+</div>
+
+<script>
+// ══════════════════════════
+//  SETUP
+// ══════════════════════════
+Chart.defaults.color = '#8A8697';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
+Chart.defaults.font.family = "'DM Sans',sans-serif";
+
+var O='#F7931A', G='#FFB800', GN='#00D68F', RD='#FF4D6A', BL='#4A9EFF', MT='#5A566A';
+var TFL = {'7':'1 Week','30':'1 Month','90':'3 Months','180':'6 Months','365':'1 Year','1825':'5 Years','max':'All Time'};
+var allData = null;  // Cache the full CryptoCompare allData response
+var ci = {};         // Chart instances
+
+function $(id) { return document.getElementById(id); }
+function fmt(n) {
+  if (n >= 1e12) return '$'+(n/1e12).toFixed(2)+'T';
+  if (n >= 1e9) return '$'+(n/1e9).toFixed(2)+'B';
+  if (n >= 1e6) return '$'+(n/1e6).toFixed(1)+'M';
+  return '$'+n.toLocaleString();
+}
+function api(u) {
+  return fetch(u).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; });
+}
+
+// ══════════════════════════
+//  LOAD ALL CHART DATA (one request, cached forever)
+//  CryptoCompare histoday?allData=true → full BTC history
+// ══════════════════════════
+function loadAllChartData(callback) {
+  if (allData) { callback(allData); return; }
+  api('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&allData=true').then(function(res) {
+    if (!res || res.Response !== 'Success') return;
+    // Convert to simple [timestamp_ms, close_price] pairs, filter out zero prices
+    allData = res.Data.Data
+      .filter(function(d) { return d.close > 0; })
+      .map(function(d) { return [d.time * 1000, d.close]; });
+    callback(allData);
+  });
+}
+
+// Slice data for a given timeframe (uses cached allData)
+function sliceData(days) {
+  if (!allData) return [];
+  if (days === 'max') return allData;
+  var cutoff = Date.now() - (parseInt(days) * 86400000);
+  return allData.filter(function(p) { return p[0] >= cutoff; });
+}
+
+// ══════════════════════════
+//  STATS (independent fire & forget)
+// ══════════════════════════
+function loadStats() {
+  api('https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&community_data=false&developer_data=false').then(function(d) {
+    if (!d) return;
+    var p = d.market_data;
+    $('price').textContent = '$' + p.current_price.usd.toLocaleString(undefined,{maximumFractionDigits:0});
+    var ch = p.price_change_percentage_24h;
+    $('pch').textContent = (ch >= 0 ? '▲ ' : '▼ ') + Math.abs(ch).toFixed(2) + '% (24h)';
+    $('pch').className = 'sch ' + (ch >= 0 ? 'up' : 'dn');
+    $('mc').textContent = fmt(p.market_cap.usd);
+    $('mcr').textContent = 'Rank #' + d.market_cap_rank;
+    $('vol').textContent = fmt(p.total_volume.usd);
+    $('vr').textContent = 'Vol/MCap: ' + ((p.total_volume.usd / p.market_cap.usd) * 100).toFixed(1) + '%';
+    var sup = p.circulating_supply || 19800000;
+    var spp = (sup / 21000000 * 100);
+    $('sp').textContent = spp.toFixed(2) + '%';
+    $('spb').style.width = spp + '%';
+    var ath = new Date(p.ath_date.usd);
+    var ds = Math.floor((Date.now() - ath) / 864e5);
+    $('dsa').textContent = ds + ' days';
+    $('dab').style.width = Math.min(ds / 365 * 100, 100) + '%';
+    drawSupply(sup);
+    $('lu').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+  });
+
+  api('https://mempool.space/api/v1/fees/recommended').then(function(f) {
+    if (!f) return;
+    $('mf').textContent = f.fastestFee + ' sat/vB';
+    $('fe').textContent = 'Eco: ' + f.economyFee + ' · Med: ' + f.halfHourFee + ' sat/vB';
+    var cg = Math.min(f.fastestFee / 150 * 100, 100);
+    $('mcg').textContent = cg < 30 ? 'Low' : cg < 70 ? 'Medium' : 'High';
+    $('mcb').style.width = cg + '%';
+    $('mcb').style.background = cg < 30 ? GN : cg < 70 ? G : RD;
+    $('nf').textContent = f.fastestFee + ' sat/vB';
+    $('nfb').style.width = Math.min(f.fastestFee / 100 * 100, 100) + '%';
+  });
+
+  api('https://mempool.space/api/blocks/tip/height').then(function(h) {
+    if (h === null) return;
+    h = parseInt(h);
+    $('bh').textContent = h.toLocaleString();
+    $('bt').textContent = (1050000 - h).toLocaleString() + ' to halving';
+    var ep = (h % 2016) / 2016 * 100;
+    $('dp').textContent = ep.toFixed(1) + '%';
+    $('dpb').style.width = ep + '%';
+    drawHalving(h);
+  });
+
+  api('https://mempool.space/api/v1/mining/hashrate/1y').then(function(d) {
+    if (!d || !d.hashrates || !d.hashrates.length) return;
+    var rates = d.hashrates.map(function(x) { return x.avgHashrate; });
+    var lat = rates[rates.length - 1], mx = Math.max.apply(null, rates);
+    $('hr').textContent = (lat / 1e18).toFixed(1) + ' EH/s';
+    var pct = Math.min(lat / mx * 100, 100);
+    $('hrp').textContent = pct.toFixed(0) + '%';
+    $('hrb').style.width = pct + '%';
+    if (d.difficulty && d.difficulty.length)
+      $('dif').textContent = 'Diff: ' + (d.difficulty[d.difficulty.length-1].difficulty / 1e12).toFixed(2) + 'T';
+  });
+
+  api('https://api.alternative.me/fng/?limit=1').then(function(d) {
+    if (!d || !d.data || !d.data[0]) return;
+    var v = parseInt(d.data[0].value);
+    $('fgl').textContent = v + ' — ' + d.data[0].value_classification;
+    $('fgb').style.width = v + '%';
+    $('fgb').style.background = v < 30 ? RD : v < 50 ? G : v < 70 ? GN : O;
+  });
+
+  api('https://api.coingecko.com/api/v3/global').then(function(d) {
+    if (!d || !d.data) return;
+    var dm = d.data.market_cap_percentage.btc.toFixed(1);
+    $('dom').textContent = dm + '%';
+    $('dob').style.width = dm + '%';
+  });
+}
+
+// ══════════════════════════
+//  CHART HELPERS
+// ══════════════════════════
+function dfmt(tf) {
+  if (tf === '7') return { weekday:'short', day:'numeric' };
+  if (tf === '30' || tf === '90') return { month:'short', day:'numeric' };
+  if (tf === '180' || tf === '365') return { month:'short', day:'numeric' };
+  return { month:'short', year:'2-digit' };
+}
+function mtk(tf) { return {'7':7,'30':10,'90':10,'180':10,'365':12,'1825':10,'max':12}[tf] || 12; }
+
+var chartOpts = {
+  tooltip: { backgroundColor:'#1A1A24', borderColor:'rgba(247,147,26,.2)', borderWidth:1 }
+};
+
+// ══════════════════════════
+//  DRAW: PRICE
+// ══════════════════════════
+function drawPrice(data, tf) {
+  var labels = data.map(function(p) { return new Date(p[0]).toLocaleDateString('en-AU', dfmt(tf)); });
+  var vals = data.map(function(p) { return p[1]; });
+  var up = vals[vals.length-1] >= vals[0];
+
+  if (ci.p) ci.p.destroy();
+  ci.p = new Chart($('pcv'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{
+      data: vals, borderColor: up ? GN : RD, borderWidth: 2, pointRadius: 0, tension: .3, fill: true,
+      backgroundColor: function(ctx) {
+        var g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+        g.addColorStop(0, up ? 'rgba(0,214,143,.15)' : 'rgba(255,77,106,.15)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        return g;
+      }
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+      plugins: { legend: { display: false }, tooltip: {
+        ...chartOpts.tooltip,
+        callbacks: { label: function(c) { return '$' + c.raw.toLocaleString(undefined, {maximumFractionDigits:0}); } }
+      }},
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: mtk(tf), font: { size:10, family:"'JetBrains Mono'" } } },
+        y: { grid: { color:'rgba(255,255,255,.03)' }, ticks: { font: { size:10, family:"'JetBrains Mono'" },
+          callback: function(v) { return v >= 1e5 ? '$'+(v/1e3).toFixed(0)+'k' : v >= 1e3 ? '$'+(v/1e3).toFixed(1)+'k' : '$'+v.toFixed(0); }
+        }}
+      }
+    }
+  });
+}
+
+// ══════════════════════════
+//  DRAW: POWER LAW
+// ══════════════════════════
+function drawPL(data, tf) {
+  var gen = new Date('2009-01-03').getTime();
+  var a = 5.83, b = -17.3;
+  var lb = [], ac = [], fv = [], sp = [], rs = [];
+
+  for (var i = 0; i < data.length; i++) {
+    var days = (data[i][0] - gen) / 864e5;
+    if (days < 1) continue;
+    var ld = Math.log10(days);
+    lb.push(new Date(data[i][0]).toLocaleDateString('en-AU', dfmt(tf)));
+    ac.push(data[i][1]);
+    fv.push(Math.pow(10, a * ld + b));
+    sp.push(Math.pow(10, a * ld + b - 0.5));
+    rs.push(Math.pow(10, a * ld + b + 0.7));
+  }
+
+  if (ci.pl) ci.pl.destroy();
+  ci.pl = new Chart($('plcv'), {
+    type: 'line',
+    data: { labels: lb, datasets: [
+      { label:'Price', data:ac, borderColor:O, borderWidth:2, pointRadius:0, tension:.3, fill:false },
+      { label:'Fair Value', data:fv, borderColor:GN, borderWidth:2, borderDash:[6,3], pointRadius:0, tension:.3, fill:false },
+      { label:'Support', data:sp, borderColor:'rgba(74,158,255,.3)', borderWidth:1, pointRadius:0, tension:.3, fill:false },
+      { label:'Resistance', data:rs, borderColor:'rgba(255,77,106,.3)', backgroundColor:'rgba(255,77,106,.03)', borderWidth:1, pointRadius:0, tension:.3, fill:'-1' }
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+      plugins: { legend: { display: false }, tooltip: {
+        ...chartOpts.tooltip,
+        callbacks: { label: function(c) { return c.dataset.label + ': $' + c.raw.toLocaleString(undefined,{maximumFractionDigits:0}); } }
+      }},
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: mtk(tf), font: { size:10, family:"'JetBrains Mono'" } } },
+        y: { type:'logarithmic', grid: { color:'rgba(255,255,255,.03)' }, ticks: { font: { size:10, family:"'JetBrains Mono'" },
+          callback: function(v) { return v >= 1e3 ? '$'+(v/1e3).toFixed(0)+'k' : '$'+v.toFixed(0); }
+        }}
+      }
+    }
+  });
+}
+
+// ══════════════════════════
+//  DRAW: S2F
+// ══════════════════════════
+function drawS2F() {
+  var msf = [], mp = [];
+  for (var s = 10; s <= 150; s += 2) { msf.push(s); mp.push(Math.exp(3.21 * Math.log(s) - 1.6)); }
+  ci.s2f = new Chart($('s2fcv'), {
+    type: 'scatter',
+    data: { datasets: [
+      { label:'Model', data:msf.map(function(s,i){return{x:s,y:mp[i]}}), borderColor:'rgba(247,147,26,.4)', backgroundColor:'transparent', showLine:true, pointRadius:0, borderWidth:2, borderDash:[5,3], tension:.4 },
+      { label:'2012–16', data:[{x:25,y:450}], backgroundColor:BL, pointRadius:10, pointHoverRadius:14 },
+      { label:'2016–20', data:[{x:50,y:8000}], backgroundColor:GN, pointRadius:10, pointHoverRadius:14 },
+      { label:'2020–24', data:[{x:100,y:35000}], backgroundColor:O, pointRadius:10, pointHoverRadius:14 }
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display:true, labels: { usePointStyle:true, pointStyle:'circle', padding:12, font:{size:10} } } },
+      scales: {
+        x: { title: { display:true, text:'S2F Ratio', font:{size:10,family:"'JetBrains Mono'"},color:MT }, grid:{color:'rgba(255,255,255,.03)'} },
+        y: { type:'logarithmic', title: { display:true, text:'Price (USD)', font:{size:10,family:"'JetBrains Mono'"},color:MT }, grid:{color:'rgba(255,255,255,.03)'}, ticks:{callback:function(v){return v>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v}} }
+      }
+    }
+  });
+}
+
+// ══════════════════════════
+//  DRAW: VALUATION BANDS
+// ══════════════════════════
+function drawVal(data) {
+  var vals = data.map(function(p){return p[1]});
+  var lb = data.map(function(p){return new Date(p[0]).toLocaleDateString('en-AU',{month:'short',day:'numeric'})});
+  var ma = vals.map(function(_,i) { if(i<199)return null; var s=0; for(var j=i-199;j<=i;j++)s+=vals[j]; return s/200; });
+
+  if (ci.v) ci.v.destroy();
+  ci.v = new Chart($('vcv'), {
+    type: 'line',
+    data: { labels: lb, datasets: [
+      { label:'Price', data:vals, borderColor:O, borderWidth:2, pointRadius:0, tension:.3, fill:false },
+      { label:'200-Day MA', data:ma, borderColor:GN, borderWidth:2, borderDash:[5,3], pointRadius:0, tension:.3, fill:false },
+      { label:'Mayer 2.4x', data:ma.map(function(v){return v?v*2.4:null}), borderColor:'rgba(255,77,106,.3)', borderWidth:1, pointRadius:0, tension:.3, fill:false },
+      { label:'Mayer 0.8x', data:ma.map(function(v){return v?v*0.8:null}), borderColor:'rgba(74,158,255,.3)', borderWidth:1, pointRadius:0, tension:.3, fill:'-1', backgroundColor:'rgba(74,158,255,.03)' }
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display:true, labels: { usePointStyle:true, pointStyle:'line', padding:12, font:{size:10} } } },
+      scales: {
+        x: { grid:{display:false}, ticks:{maxTicksLimit:8,font:{size:10,family:"'JetBrains Mono'"}} },
+        y: { grid:{color:'rgba(255,255,255,.03)'}, ticks:{callback:function(v){return '$'+(v/1e3).toFixed(0)+'k'},font:{size:10,family:"'JetBrains Mono'"}} }
+      }
+    }
+  });
+}
+
+// ══════════════════════════
+//  DRAW: HALVING RING
+// ══════════════════════════
+function drawHalving(h) {
+  var prog = (h - 840000) / 210000;
+  $('hp').textContent = (prog * 100).toFixed(1) + '%';
+  var rem = 1050000 - h;
+  var ed = new Date(); ed.setDate(ed.getDate() + Math.round(rem * 10 / 1440));
+  $('he').textContent = 'Est. ' + ed.toLocaleDateString('en-AU', {month:'long',year:'numeric'});
+  $('br').textContent = rem.toLocaleString() + ' blocks left';
+
+  var cv = $('hrcv'), cx = cv.getContext('2d');
+  cx.clearRect(0, 0, 180, 180);
+  cx.beginPath(); cx.arc(90,90,72,0,Math.PI*2); cx.strokeStyle = '#1A1A24'; cx.lineWidth = 8; cx.stroke();
+  cx.beginPath(); cx.arc(90,90,72,-Math.PI/2,-Math.PI/2 + prog*Math.PI*2);
+  var g = cx.createLinearGradient(0,0,180,180); g.addColorStop(0,O); g.addColorStop(1,G);
+  cx.strokeStyle = g; cx.lineWidth = 8; cx.lineCap = 'round'; cx.stroke();
+}
+
+// ══════════════════════════
+//  DRAW: SUPPLY
+// ══════════════════════════
+function drawSupply(circ) {
+  var lost = 3700000, unmined = 21000000 - circ, active = circ - lost;
+  if (ci.sp) ci.sp.destroy();
+  ci.sp = new Chart($('spcv'), {
+    type: 'doughnut',
+    data: { labels:['Active','Est. Lost','Unmined'], datasets:[{data:[active,lost,unmined],backgroundColor:[O,RD,MT],borderWidth:0,hoverOffset:8}] },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins: { legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:12,font:{size:11},color:'#8A8697'}},
+        tooltip:{backgroundColor:'#1A1A24',callbacks:{label:function(c){return c.label+': '+(c.raw/1e6).toFixed(2)+'M BTC'}}} }
+    }
+  });
+}
+
+// ══════════════════════════
+//  TIMEFRAME BUTTONS
+// ══════════════════════════
+$('ptf').addEventListener('click', function(e) {
+  var btn = e.target;
+  if (!btn.classList.contains('tb')) return;
+  var d = btn.getAttribute('data-d');
+  $('ptf').querySelectorAll('.tb').forEach(function(b) { b.classList.remove('a'); });
+  btn.classList.add('a');
+  $('ptitle').textContent = 'Price History (' + TFL[d] + ')';
+  var sliced = sliceData(d);
+  if (sliced.length) drawPrice(sliced, d);
+});
+
+$('pltf').addEventListener('click', function(e) {
+  var btn = e.target;
+  if (!btn.classList.contains('tb')) return;
+  var d = btn.getAttribute('data-d');
+  $('pltf').querySelectorAll('.tb').forEach(function(b) { b.classList.remove('a'); });
+  btn.classList.add('a');
+  $('pltitle').textContent = 'Power Law Model (' + TFL[d] + ')';
+  var sliced = sliceData(d);
+  if (sliced.length) drawPL(sliced, d);
+});
+
+// ══════════════════════════
+//  INIT
+// ══════════════════════════
+
+// 1. Load stats immediately (all independent)
+loadStats();
+
+// 2. Load S2F (no API needed)
+drawS2F();
+
+// 3. Load ALL chart data in ONE request, then draw everything from cache
+loadAllChartData(function(data) {
+  // Draw price chart (default 1Y)
+  var yearData = sliceData('365');
+  drawPrice(yearData, '365');
+  drawVal(yearData);
+
+  // Draw power law (all time)
+  drawPL(data, 'max');
+});
+
+// 4. Refresh stats only every 60s
+setInterval(loadStats, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Going Deeper — Intermediate Course | Bitcoin Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --btc-orange: #F7931A;
+    --btc-gold: #FFB800;
+    --btc-dark: #0A0A0F;
+    --btc-deeper: #06060A;
+    --surface: #111118;
+    --surface-light: #1A1A24;
+    --surface-hover: #22222E;
+    --text-primary: #F0EDE6;
+    --text-secondary: #8A8697;
+    --text-muted: #5A566A;
+    --accent-green: #00D68F;
+    --accent-red: #FF4D6A;
+    --accent-blue: #4A9EFF;
+    --glow: rgba(247, 147, 26, 0.15);
+    --font-display: 'Anybody', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--btc-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--btc-deeper); }
+  ::-webkit-scrollbar-thumb { background: var(--btc-orange); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(20px); background: rgba(10, 10, 15, 0.85);
+    border-bottom: 1px solid rgba(247, 147, 26, 0.1);
+  }
+  .logo {
+    font-family: var(--font-display); font-weight: 900; font-size: 1.4rem;
+    color: var(--btc-orange); letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 0.5rem; text-decoration: none;
+  }
+  .logo-icon {
+    width: 32px; height: 32px; background: var(--btc-orange); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--btc-dark); font-weight: 900;
+  }
+  .nav-back {
+    color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+    font-weight: 500; transition: color 0.3s; display: flex; align-items: center; gap: 0.4rem;
+  }
+  .nav-back:hover { color: var(--btc-orange); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-container {
+    position: fixed; top: 65px; left: 0; width: 100%; height: 3px;
+    background: var(--surface); z-index: 999;
+  }
+  .progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold));
+    width: 0%; transition: width 0.5s ease; box-shadow: 0 0 10px rgba(247, 147, 26, 0.4);
+  }
+
+  /* ── PAYWALL ── */
+  .paywall-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(6, 6, 10, 0.95);
+    backdrop-filter: blur(20px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .paywall-overlay.hidden { display: none; }
+
+  .paywall-card {
+    background: var(--surface);
+    border: 1px solid rgba(247, 147, 26, 0.15);
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .paywall-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold), var(--btc-orange));
+  }
+
+  .paywall-icon { font-size: 3rem; margin-bottom: 1.2rem; }
+
+  .paywall-card h2 {
+    font-family: var(--font-display); font-weight: 900; font-size: 1.8rem;
+    margin-bottom: 0.5rem; letter-spacing: -0.5px;
+  }
+  .paywall-card h2 span {
+    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .paywall-subtitle {
+    color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;
+  }
+
+  .paywall-features {
+    list-style: none; text-align: left; margin-bottom: 2rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .paywall-features li {
+    display: flex; align-items: center; gap: 0.7rem;
+    color: var(--text-secondary); font-size: 0.9rem;
+  }
+  .paywall-features .check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(0, 214, 143, 0.1); border: 1px solid rgba(0, 214, 143, 0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; color: var(--accent-green); flex-shrink: 0;
+  }
+
+  .paywall-price {
+    font-family: var(--font-display); font-weight: 900; font-size: 2.5rem;
+    color: var(--text-primary); margin-bottom: 0.3rem;
+  }
+  .paywall-price-note {
+    font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem;
+  }
+
+  .paywall-methods {
+    display: flex; gap: 0.8rem; margin-bottom: 1.5rem; justify-content: center; flex-wrap: wrap;
+  }
+
+  .pay-btn {
+    padding: 0.9rem 1.8rem; border-radius: 12px; font-family: var(--font-body);
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;
+    border: none; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .pay-btn-btc {
+    background: var(--btc-orange); color: var(--btc-dark);
+    box-shadow: 0 0 25px rgba(247, 147, 26, 0.3);
+  }
+  .pay-btn-btc:hover { box-shadow: 0 0 45px rgba(247, 147, 26, 0.5); transform: translateY(-2px); }
+
+  .pay-btn-card {
+    background: var(--surface-light); color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .pay-btn-card:hover { border-color: var(--text-secondary); transform: translateY(-2px); }
+
+  .pay-btn-ln {
+    background: rgba(74, 158, 255, 0.1); color: var(--accent-blue);
+    border: 1px solid rgba(74, 158, 255, 0.25);
+  }
+  .pay-btn-ln:hover { background: rgba(74, 158, 255, 0.15); transform: translateY(-2px); }
+
+  .paywall-guarantee {
+    font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;
+  }
+
+  .paywall-skip {
+    display: block; margin-top: 1.2rem; color: var(--text-muted); font-size: 0.8rem;
+    cursor: pointer; background: none; border: none; font-family: var(--font-body);
+    text-decoration: underline; transition: color 0.3s;
+  }
+  .paywall-skip:hover { color: var(--text-secondary); }
+
+  /* ── LAYOUT ── */
+  .course-layout { min-height: 100vh; padding-top: 68px; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top: 68px; left: 0; width: 260px; height: calc(100vh - 68px);
+    background: var(--surface); border-right: 1px solid rgba(255, 255, 255, 0.05);
+    overflow-y: auto; padding: 1.5rem 0; z-index: 100;
+  }
+  .sidebar-header {
+    padding: 0 1.5rem 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 1rem;
+  }
+  .sidebar-level {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--btc-orange);
+    background: rgba(247, 147, 26, 0.1); padding: 0.2rem 0.6rem;
+    border-radius: 100px; display: inline-block; margin-bottom: 0.5rem;
+  }
+  .sidebar-title { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+  .sidebar-progress {
+    margin-top: 0.8rem; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);
+  }
+  .sidebar-progress-bar {
+    width: 100%; height: 4px; background: var(--surface-light); border-radius: 2px;
+    margin-top: 0.4rem; overflow: hidden;
+  }
+  .sidebar-progress-fill {
+    height: 100%; background: var(--accent-green); border-radius: 2px;
+    width: 0%; transition: width 0.5s ease;
+  }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1.5rem;
+    color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+    transition: all 0.3s; border-left: 3px solid transparent;
+  }
+  .sidebar-nav a:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.02); }
+  .sidebar-nav a.active {
+    color: var(--btc-orange); background: rgba(247, 147, 26, 0.05); border-left-color: var(--btc-orange);
+  }
+  .sidebar-nav a.completed { color: var(--accent-green); }
+  .sidebar-nav .nav-num {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--surface-light);
+    border: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center;
+    justify-content: center; font-family: var(--font-mono); font-size: 0.65rem;
+    flex-shrink: 0; transition: all 0.3s;
+  }
+  .sidebar-nav a.active .nav-num {
+    background: rgba(247, 147, 26, 0.15); border-color: var(--btc-orange); color: var(--btc-orange);
+  }
+  .sidebar-nav a.completed .nav-num {
+    background: rgba(0, 214, 143, 0.15); border-color: var(--accent-green); color: var(--accent-green);
+  }
+  .sidebar-quiz-link { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+  .sidebar-quiz-link a .nav-num {
+    background: rgba(255, 184, 0, 0.1); border-color: var(--btc-gold); color: var(--btc-gold); font-size: 0.7rem;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    margin-left: 260px; padding: 3rem 4rem 6rem; max-width: 960px;
+    min-width: 0; word-wrap: break-word; overflow-wrap: break-word;
+  }
+
+  /* ── LESSON ── */
+  .lesson {
+    margin-bottom: 5rem; padding-bottom: 4rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .lesson:last-of-type { border-bottom: none; }
+  .lesson-num {
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--btc-orange);
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .lesson h2 {
+    font-family: var(--font-display); font-weight: 900;
+    font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -1px;
+    margin-bottom: 1.5rem; line-height: 1.1;
+  }
+  .lesson p {
+    color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 1.3rem; line-height: 1.8;
+  }
+  .lesson p strong { color: var(--text-primary); }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    background: var(--surface); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px; padding: 1.5rem 2rem; margin: 1.5rem 0;
+    position: relative; overflow: hidden;
+  }
+  .info-box::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  }
+  .info-box.insight::before { background: var(--btc-orange); }
+  .info-box.warning::before { background: var(--accent-red); }
+  .info-box.tip::before { background: var(--accent-green); }
+  .info-box.example::before { background: var(--accent-blue); }
+  .info-box-label {
+    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .info-box.insight .info-box-label { color: var(--btc-orange); }
+  .info-box.warning .info-box-label { color: var(--accent-red); }
+  .info-box.tip .info-box-label { color: var(--accent-green); }
+  .info-box.example .info-box-label { color: var(--accent-blue); }
+  .info-box p { font-size: 0.95rem; margin-bottom: 0; color: var(--text-secondary); line-height: 1.7; }
+
+  /* ── COMPARISON TABLE ── */
+  .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .comparison-table th {
+    font-family: var(--font-display); font-weight: 700; text-align: left; padding: 0.8rem 1.2rem;
+    background: var(--surface); border-bottom: 2px solid var(--btc-orange); font-size: 0.85rem;
+  }
+  .comparison-table td {
+    padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-secondary);
+  }
+  .comparison-table tr:hover td { background: rgba(247, 147, 26, 0.03); }
+  .comparison-table .feature-col { color: var(--text-primary); font-weight: 500; }
+
+  /* ── DIAGRAM ── */
+  .diagram {
+    background: var(--surface); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px; padding: 2rem; margin: 2rem 0; text-align: center;
+  }
+  .diagram-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+    margin-bottom: 1.5rem; color: var(--text-primary);
+  }
+  .flow-steps {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--surface-light); border: 1px solid rgba(247, 147, 26, 0.15);
+    border-radius: 10px; padding: 0.8rem 1.2rem; font-size: 0.8rem;
+    color: var(--text-primary); text-align: center; min-width: 110px; transition: all 0.3s;
+  }
+  .flow-step:hover { border-color: var(--btc-orange); transform: translateY(-2px); }
+  .flow-step .step-emoji { font-size: 1.5rem; display: block; margin-bottom: 0.3rem; }
+  .flow-arrow { color: var(--btc-orange); font-size: 1.2rem; font-weight: 700; }
+
+  /* ── LESSON COMPLETE BUTTON ── */
+  .lesson-complete-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem;
+    background: transparent; border: 1px solid rgba(0, 214, 143, 0.3); border-radius: 8px;
+    color: var(--accent-green); font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.3s; margin-top: 1.5rem;
+  }
+  .lesson-complete-btn:hover { background: rgba(0, 214, 143, 0.08); border-color: var(--accent-green); }
+  .lesson-complete-btn.done { background: rgba(0, 214, 143, 0.1); border-color: var(--accent-green); pointer-events: none; }
+
+  /* ── QUIZ ── */
+  .quiz-section { margin-top: 3rem; padding-top: 3rem; border-top: 2px solid var(--btc-orange); }
+  .quiz-header { text-align: center; margin-bottom: 3rem; }
+  .quiz-header h2 {
+    font-family: var(--font-display); font-weight: 900;
+    font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -1px; margin-bottom: 0.5rem;
+  }
+  .quiz-header h2 span {
+    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .quiz-header p { color: var(--text-secondary); font-size: 1rem; }
+  .quiz-progress { text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; }
+  .quiz-progress-bar {
+    width: 100%; max-width: 400px; height: 4px; background: var(--surface-light);
+    border-radius: 2px; margin: 0.5rem auto 0; overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold));
+    border-radius: 2px; transition: width 0.5s ease;
+  }
+  .quiz-question-card {
+    background: var(--surface); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px; padding: 2.5rem; max-width: 700px; margin: 0 auto 2rem;
+  }
+  .question-num {
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--btc-orange);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem;
+  }
+  .question-text { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+  .quiz-option {
+    display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem;
+    background: var(--surface-light); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px; cursor: pointer; transition: all 0.3s; font-size: 0.95rem; color: var(--text-secondary);
+  }
+  .quiz-option:hover { border-color: rgba(247, 147, 26, 0.3); color: var(--text-primary); background: var(--surface-hover); }
+  .quiz-option.selected { border-color: var(--btc-orange); background: rgba(247, 147, 26, 0.08); color: var(--text-primary); }
+  .quiz-option.correct { border-color: var(--accent-green); background: rgba(0, 214, 143, 0.08); color: var(--accent-green); }
+  .quiz-option.incorrect { border-color: var(--accent-red); background: rgba(255, 77, 106, 0.08); color: var(--accent-red); }
+  .option-letter {
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; flex-shrink: 0; transition: all 0.3s;
+  }
+  .quiz-option.selected .option-letter { background: var(--btc-orange); border-color: var(--btc-orange); color: var(--btc-dark); }
+  .quiz-option.correct .option-letter { background: var(--accent-green); border-color: var(--accent-green); color: var(--btc-dark); }
+  .quiz-option.incorrect .option-letter { background: var(--accent-red); border-color: var(--accent-red); color: var(--btc-dark); }
+  .quiz-feedback { margin-top: 1.2rem; padding: 1rem 1.2rem; border-radius: 10px; font-size: 0.9rem; line-height: 1.6; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-feedback { background: rgba(0, 214, 143, 0.08); border: 1px solid rgba(0, 214, 143, 0.2); color: var(--accent-green); }
+  .quiz-feedback.incorrect-feedback { background: rgba(255, 77, 106, 0.08); border: 1px solid rgba(255, 77, 106, 0.2); color: var(--accent-red); }
+  .quiz-nav { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+  .quiz-btn {
+    padding: 0.8rem 2rem; border-radius: 10px; font-family: var(--font-body);
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; border: none;
+  }
+  .quiz-btn-primary { background: var(--btc-orange); color: var(--btc-dark); }
+  .quiz-btn-primary:hover { box-shadow: 0 0 30px rgba(247, 147, 26, 0.3); transform: translateY(-2px); }
+  .quiz-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .quiz-btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.1); }
+  .quiz-btn-ghost:hover { border-color: var(--btc-orange); color: var(--btc-orange); }
+
+  /* ── RESULTS ── */
+  .quiz-results { text-align: center; padding: 3rem; display: none; }
+  .quiz-results.show { display: block; }
+  .results-score-ring {
+    width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 2rem;
+    display: flex; align-items: center; justify-content: center; flex-direction: column; position: relative;
+  }
+  .results-score-ring::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 4px solid var(--surface-light); }
+  .results-score-ring.pass::before { border-color: var(--accent-green); box-shadow: 0 0 40px rgba(0, 214, 143, 0.2); }
+  .results-score-ring.fail::before { border-color: var(--accent-red); box-shadow: 0 0 40px rgba(255, 77, 106, 0.2); }
+  .results-percent { font-family: var(--font-display); font-weight: 900; font-size: 3rem; line-height: 1; }
+  .results-score-ring.pass .results-percent { color: var(--accent-green); }
+  .results-score-ring.fail .results-percent { color: var(--accent-red); }
+  .results-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.3rem; }
+  .results-title { font-family: var(--font-display); font-weight: 900; font-size: 2rem; margin-bottom: 0.5rem; }
+  .results-desc { color: var(--text-secondary); font-size: 1rem; max-width: 500px; margin: 0 auto 2rem; line-height: 1.7; }
+  .results-breakdown { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; }
+  .breakdown-item { text-align: center; }
+  .breakdown-num { font-family: var(--font-display); font-weight: 900; font-size: 1.8rem; }
+  .breakdown-num.green { color: var(--accent-green); }
+  .breakdown-num.red { color: var(--accent-red); }
+  .breakdown-label { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── CERTIFICATE ── */
+  .certificate-container { display: none; margin: 2rem auto; max-width: 650px; }
+  .certificate-container.show { display: block; }
+  .certificate {
+    background: linear-gradient(145deg, #1a1712, #0f0d0a);
+    border: 2px solid var(--btc-orange); border-radius: 20px; padding: 3rem 2.5rem;
+    text-align: center; position: relative; overflow: hidden;
+    box-shadow: 0 0 60px rgba(247, 147, 26, 0.15), inset 0 0 60px rgba(247, 147, 26, 0.03);
+  }
+  .certificate::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(247, 147, 26, 0.2); border-radius: 14px; pointer-events: none; }
+  .cert-badge {
+    width: 80px; height: 80px; margin: 0 auto 1.2rem;
+    background: rgba(247, 147, 26, 0.1); border: 2px solid var(--btc-orange); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
+    position: relative; z-index: 1; box-shadow: 0 0 30px rgba(247, 147, 26, 0.2);
+  }
+  .cert-pre { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.3rem; position: relative; z-index: 1; }
+  .cert-title {
+    font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; margin-bottom: 0.3rem;
+    position: relative; z-index: 1;
+    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .cert-course { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1.2rem; position: relative; z-index: 1; }
+  .cert-name {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; color: var(--text-primary);
+    border-bottom: 1px solid rgba(247, 147, 26, 0.3); padding-bottom: 0.5rem; margin-bottom: 0.5rem;
+    display: inline-block; min-width: 200px; position: relative; z-index: 1;
+  }
+  .cert-date { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem; position: relative; z-index: 1; }
+  .cert-score { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-green); margin-top: 0.3rem; position: relative; z-index: 1; }
+  .cert-id { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: 1rem; opacity: 0.5; position: relative; z-index: 1; }
+  .cert-actions { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+
+  .cert-name-input {
+    background: transparent; border: none; border-bottom: 1px solid rgba(247, 147, 26, 0.3);
+    color: var(--text-primary); font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
+    text-align: center; padding: 0.3rem 0.5rem; min-width: 200px; outline: none; position: relative; z-index: 1;
+  }
+  .cert-name-input::placeholder { color: var(--text-muted); font-weight: 400; font-size: 1rem; }
+  .cert-name-input:focus { border-bottom-color: var(--btc-orange); }
+
+  @media print {
+    body * { visibility: hidden; }
+    .certificate, .certificate * { visibility: visible; }
+    .certificate {
+      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 700px; background: #1a1712 !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      border: 3px solid #F7931A !important; box-shadow: none !important;
+    }
+    .cert-actions, .quiz-btn, nav, .sidebar, .progress-bar-container, .paywall-overlay { display: none !important; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    .flow-steps { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- PAYWALL -->
+<div class="paywall-overlay" id="paywall">
+  <div class="paywall-card">
+    <div class="paywall-icon">⚡</div>
+    <h2>Unlock <span>Going Deeper</span></h2>
+    <p class="paywall-subtitle">7 in-depth modules covering mining, halving cycles, on-chain analysis, Lightning Network, and more — plus a certification quiz.</p>
+    <ul class="paywall-features">
+      <li><span class="check">✓</span> 7 comprehensive lesson modules</li>
+      <li><span class="check">✓</span> Interactive diagrams & data breakdowns</li>
+      <li><span class="check">✓</span> 12-question certification quiz</li>
+      <li><span class="check">✓</span> Intermediate Certificate on completion</li>
+      <li><span class="check">✓</span> Lifetime access — learn at your own pace</li>
+    </ul>
+    <div class="paywall-price">$19</div>
+    <p class="paywall-price-note">One-time payment · Lifetime access · No subscription</p>
+    <div class="paywall-methods">
+      <button class="pay-btn pay-btn-btc" onclick="unlockCourse()">₿ Pay with Bitcoin</button>
+      <button class="pay-btn pay-btn-ln" onclick="unlockCourse()">⚡ Lightning</button>
+      <button class="pay-btn pay-btn-card" onclick="unlockCourse()">💳 Card</button>
+    </div>
+    <p class="paywall-guarantee">🔒 30-day money-back guarantee · Secure payment</p>
+    <button class="paywall-skip" onclick="unlockCourse()">Preview for free (demo mode)</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="bitcoin-education.html" class="logo">
+    <div class="logo-icon">₿</div>
+    Bitcoin <span style="color: var(--text-primary);">Academy</span>
+  </a>
+  <a href="bitcoin-education.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="course-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-level">● Intermediate</span>
+      <div class="sidebar-title">Going Deeper</div>
+      <div class="sidebar-progress">
+        <span id="completedCount">0</span> / 7 Lessons Complete
+        <div class="sidebar-progress-bar"><div class="sidebar-progress-fill" id="sidebarProgress"></div></div>
+      </div>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="#lesson1" class="active" data-lesson="1"><span class="nav-num">01</span> Proof of Work</a></li>
+      <li><a href="#lesson2" data-lesson="2"><span class="nav-num">02</span> Halving Cycles</a></li>
+      <li><a href="#lesson3" data-lesson="3"><span class="nav-num">03</span> On-Chain Analysis</a></li>
+      <li><a href="#lesson4" data-lesson="4"><span class="nav-num">04</span> Lightning Network</a></li>
+      <li><a href="#lesson5" data-lesson="5"><span class="nav-num">05</span> Bitcoin vs Altcoins</a></li>
+      <li><a href="#lesson6" data-lesson="6"><span class="nav-num">06</span> Self-Custody</a></li>
+      <li><a href="#lesson7" data-lesson="7"><span class="nav-num">07</span> Fee Markets</a></li>
+      <li class="sidebar-quiz-link"><a href="#quiz" data-lesson="quiz"><span class="nav-num">🎓</span> Final Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- LESSON 1 -->
+    <div class="lesson reveal" id="lesson1">
+      <div class="lesson-num">Module 01</div>
+      <h2>Proof of Work & Mining Economics</h2>
+      <p>Mining is the process that secures Bitcoin and issues new coins. But it's far more than "solving puzzles" — it's an <strong>economic system</strong> that converts real-world energy into digital security.</p>
+      <p>Here's how it actually works: miners collect pending transactions from the mempool and assemble them into a candidate block. They then repeatedly hash the block header with different <strong>nonce</strong> values (random numbers), searching for a hash output below a target threshold. This is pure brute-force computation — there's no shortcut.</p>
+      <p>The first miner to find a valid hash broadcasts their block to the network. Every other node independently verifies it's valid (correct transactions, valid hash, follows all consensus rules), then adds it to their chain. The winning miner receives the <strong>block reward</strong> (currently 3.125 BTC) plus all transaction fees in the block.</p>
+
+      <div class="info-box insight">
+        <div class="info-box-label">💡 The Economics</div>
+        <p>Mining is a business. Miners invest in hardware (ASICs costing $2,000–$15,000+), pay for electricity (the largest ongoing cost), and compete globally. The difficulty adjustment ensures that no matter how much computing power joins the network, blocks are found roughly every 10 minutes. More miners = higher difficulty = higher cost to mine. This creates a natural equilibrium: miners only participate when it's profitable, and the most efficient operations survive.</p>
+      </div>
+
+      <p>The <strong>difficulty adjustment</strong> is one of Bitcoin's most elegant mechanisms. Every 2,016 blocks (~2 weeks), the protocol measures how fast blocks were found. If blocks came too fast (under 10 min average), difficulty increases. Too slow? It decreases. This self-regulating feedback loop has maintained ~10-minute blocks for over 15 years regardless of how much hash power joins or leaves.</p>
+
+      <div class="info-box example">
+        <div class="info-box-label">📌 Hash Rate Context</div>
+        <p>Bitcoin's hash rate has grown from essentially zero in 2009 to over 700 exahashes per second (EH/s) — that's 700 quintillion hashes per second. This staggering computation makes Bitcoin the most secure computing network ever created. To attack it, you'd need to outpace the combined output of every miner on Earth, simultaneously.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(1)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 2 -->
+    <div class="lesson reveal" id="lesson2">
+      <div class="lesson-num">Module 02</div>
+      <h2>The Halving Cycle & Supply Dynamics</h2>
+      <p>Every 210,000 blocks (roughly 4 years), the Bitcoin block reward is cut in half. This event, called the <strong>halving</strong>, is the mechanism that controls Bitcoin's monetary inflation rate and ensures its supply approaches — but never reaches — 21 million.</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr><th>Halving</th><th>Year</th><th>Block Reward</th><th>Daily New BTC</th><th>Annual Inflation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="feature-col">Genesis</td><td>2009</td><td>50 BTC</td><td>~7,200</td><td>N/A</td></tr>
+          <tr><td class="feature-col">1st Halving</td><td>2012</td><td>25 BTC</td><td>~3,600</td><td>~8.4%</td></tr>
+          <tr><td class="feature-col">2nd Halving</td><td>2016</td><td>12.5 BTC</td><td>~1,800</td><td>~4.2%</td></tr>
+          <tr><td class="feature-col">3rd Halving</td><td>2020</td><td>6.25 BTC</td><td>~900</td><td>~1.8%</td></tr>
+          <tr><td class="feature-col">4th Halving</td><td>2024</td><td>3.125 BTC</td><td>~450</td><td>~0.85%</td></tr>
+        </tbody>
+      </table>
+
+      <p>Notice a pattern: after each halving, the rate of new supply entering the market is drastically reduced. Meanwhile, demand operates independently — driven by adoption, institutional interest, and macroeconomic conditions. When supply growth shrinks while demand remains constant or grows, basic economics suggests upward price pressure.</p>
+
+      <div class="info-box insight">
+        <div class="info-box-label">💡 Stock-to-Flow</div>
+        <p>Bitcoin's "stock-to-flow" ratio — the relationship between existing supply (stock) and annual new production (flow) — surpassed gold's after the 2024 halving. This means Bitcoin is now harder to produce, relative to existing supply, than gold. By the next halving in ~2028, it will be harder still. This increasing scarcity is unique among monetary assets.</p>
+      </div>
+
+      <div class="info-box warning">
+        <div class="info-box-label">⚠️ Important Nuance</div>
+        <p>While all four halvings have historically preceded significant price increases, correlation is not causation. Markets are forward-looking, and halvings are predictable events. Some argue the supply shock is already "priced in." Others argue that the sustained reduction in sell pressure from miners creates genuine supply squeezes. The truth likely involves both factors. Never invest based on halving cycles alone.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(2)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 3 -->
+    <div class="lesson reveal" id="lesson3">
+      <div class="lesson-num">Module 03</div>
+      <h2>On-Chain Analysis Fundamentals</h2>
+      <p>Because Bitcoin's ledger is fully public, anyone can analyse the movement of every coin in existence. This field — <strong>on-chain analysis</strong> — provides insights that are impossible with traditional assets. It's like being able to see every transaction in every bank account, in real time.</p>
+
+      <p><strong>Key metrics to understand:</strong></p>
+      <p><strong>UTXO Age Distribution:</strong> This shows how long coins have been sitting unmoved. When a large percentage of supply hasn't moved in 1+ years, it suggests holders are accumulating (bullish signal). When old coins suddenly start moving, it may indicate long-term holders are taking profits.</p>
+      <p><strong>Exchange Flows:</strong> Coins moving to exchanges typically signal intent to sell. Coins moving off exchanges signal accumulation and self-custody. Net exchange outflows have historically correlated with price appreciation.</p>
+      <p><strong>Realised Price:</strong> The average price at which every Bitcoin last moved on-chain. This gives a "cost basis" for the entire network. When the market price is above the realised price, the average holder is in profit. When below, the average holder is underwater.</p>
+      <p><strong>MVRV Ratio:</strong> Market Value to Realised Value. When this ratio is extremely high (>3), the market may be overheated. When it dips below 1, Bitcoin is historically undervalued relative to aggregate cost basis.</p>
+
+      <div class="info-box tip">
+        <div class="info-box-label">✅ Practical Application</div>
+        <p>On-chain analysis doesn't predict the future, but it reveals the behaviour of market participants with mathematical certainty. Unlike traditional market analysis which relies on price and volume alone, on-chain data shows you what long-term holders, miners, and whales are actually doing with their coins — not what they say they're doing.</p>
+      </div>
+
+      <p><strong>Miner behaviour</strong> is especially informative. When miners accumulate (hold their newly minted coins), it suggests they expect higher prices. When they rapidly sell, they may be covering costs or de-risking. Miner reserve data is publicly trackable.</p>
+
+      <div class="info-box example">
+        <div class="info-box-label">📌 Free On-Chain Tools</div>
+        <p>You can explore on-chain data for free using platforms like Glassnode (limited free tier), Blockchain.com's explorer, Mempool.space (for real-time mempool and fee data), and Clark Moody's Bitcoin Dashboard for a comprehensive live overview of network statistics.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(3)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 4 -->
+    <div class="lesson reveal" id="lesson4">
+      <div class="lesson-num">Module 04</div>
+      <h2>Lightning Network Deep Dive</h2>
+      <p>Bitcoin's base layer processes ~7 transactions per second. Visa handles ~24,000. This is not a bug — Bitcoin's base layer prioritises <strong>security and decentralisation</strong> over speed. The Lightning Network is how Bitcoin scales without compromising those properties.</p>
+
+      <div class="diagram">
+        <div class="diagram-title">How a Lightning Payment Works</div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="step-emoji">🔗</span> Open a channel (on-chain tx)</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="step-emoji">⚡</span> Unlimited instant payments off-chain</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="step-emoji">📡</span> Route through the network</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="step-emoji">🔒</span> Close channel (final on-chain tx)</div>
+        </div>
+      </div>
+
+      <p>Lightning works by creating <strong>payment channels</strong> between two parties. Once a channel is open (via a single on-chain transaction), those parties can transact thousands of times between themselves — instantly and with near-zero fees — without touching the main blockchain. When they're done, a single closing transaction settles the final balances on-chain.</p>
+      <p>The genius is in <strong>routing</strong>: you don't need a direct channel with everyone. If Alice has a channel with Bob, and Bob has a channel with Carol, Alice can pay Carol through Bob — automatically and trustlessly. The network finds optimal routes in milliseconds.</p>
+
+      <div class="info-box insight">
+        <div class="info-box-label">💡 Real-World Impact</div>
+        <p>Lightning enables Bitcoin for everyday purchases — coffee, groceries, ride-sharing. El Salvador's Chivo wallet uses Lightning for its national Bitcoin infrastructure. Strike uses it for cross-border remittances at nearly zero cost. Apps like Wallet of Satoshi and Phoenix make Lightning accessible to anyone with a smartphone. The network now has over 15,000 nodes and growing capacity.</p>
+      </div>
+
+      <div class="info-box warning">
+        <div class="info-box-label">⚠️ Trade-offs</div>
+        <p>Lightning is not perfect. It requires recipients to be online, channels need liquidity management, and routing large payments can be challenging. It's best suited for small-to-medium everyday payments, while the base layer handles large settlements and long-term storage. Think of Lightning as Bitcoin's "checking account" and the base layer as its "vault."</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(4)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 5 -->
+    <div class="lesson reveal" id="lesson5">
+      <div class="lesson-num">Module 05</div>
+      <h2>Bitcoin vs Altcoins: A Framework</h2>
+      <p>There are over 20,000 cryptocurrencies. How do you evaluate them? Rather than comparing individual projects, let's build a <strong>framework</strong> for thinking about what makes Bitcoin fundamentally different from everything else.</p>
+
+      <p><strong>1. True Decentralisation:</strong> Bitcoin has no CEO, no foundation with controlling power, no pre-mine, and no venture capital investors who got special allocations. Satoshi disappeared. No one can change Bitcoin's rules unilaterally. Most altcoins have identifiable founders, foundations, or companies with outsized influence.</p>
+      <p><strong>2. Immaculate Conception:</strong> Bitcoin launched with no pre-mine, no ICO, no venture funding, and no insider allocation. Satoshi mined alongside everyone else using basic hardware. This "fair launch" has never been replicated — every subsequent project has had some form of insider advantage.</p>
+      <p><strong>3. Monetary Policy Credibility:</strong> Bitcoin's 21 million supply cap has never been changed. Ethereum has changed its monetary policy multiple times. Many altcoins have inflationary schedules controlled by small teams. The credibility of a monetary policy is proportional to its resistance to change.</p>
+      <p><strong>4. The Lindy Effect:</strong> Bitcoin has been running since 2009 without a single minute of downtime or a successful attack on its base protocol. The longer a system survives, the longer it's likely to continue surviving. No other cryptocurrency has this track record.</p>
+
+      <div class="info-box insight">
+        <div class="info-box-label">💡 The Network Effect</div>
+        <p>Bitcoin's value isn't just technical — it's sociological. It has the most miners (security), the most nodes (decentralisation), the most liquidity (market depth), the most regulatory clarity, and the most brand recognition. These network effects compound over time, creating a moat that is extraordinarily difficult for competitors to cross. Technology alone doesn't win — adoption does.</p>
+      </div>
+
+      <div class="info-box warning">
+        <div class="info-box-label">⚠️ Balanced Perspective</div>
+        <p>This isn't to say all altcoins are worthless — some explore genuine innovations in smart contracts, privacy, or scalability. But applying this framework helps separate signal from noise. Ask: who controls it, how was it launched, can the rules change, and how long has it survived? These questions filter out the vast majority of projects that won't survive the next decade.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(5)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 6 -->
+    <div class="lesson reveal" id="lesson6">
+      <div class="lesson-num">Module 06</div>
+      <h2>Self-Custody & Hardware Wallets</h2>
+      <p>In the Beginner course, we covered wallets at a high level. Now let's go deeper into <strong>self-custody</strong> — arguably the most important practice in Bitcoin.</p>
+      <p>Self-custody means holding your own private keys, rather than trusting a third party (exchange, bank, or custodian) to hold them for you. When you self-custody, your Bitcoin exists as a mathematical relationship between your private key and the blockchain. No one can freeze it, seize it, or deny you access — as long as you have your keys.</p>
+
+      <p><strong>Hardware Wallet Deep Dive:</strong></p>
+      <p>A hardware wallet is a purpose-built device that generates and stores your private keys in a secure chip, isolated from the internet. Even when connected to a computer to sign transactions, the private key never leaves the device. The main players include Ledger (Nano S Plus, Nano X), Trezor (Model One, Model T, Safe 3), Coldcard (for advanced users), and BitBox02.</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr><th>Feature</th><th>Exchange Custody</th><th>Software Wallet</th><th>Hardware Wallet</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="feature-col">Who holds keys?</td><td>The exchange</td><td>You (on your device)</td><td>You (on secure chip)</td></tr>
+          <tr><td class="feature-col">Internet exposure</td><td>Always online</td><td>Online when app is open</td><td>Keys never touch internet</td></tr>
+          <tr><td class="feature-col">Hack risk</td><td>High (exchange is a target)</td><td>Medium (device malware)</td><td>Very low (air-gapped signing)</td></tr>
+          <tr><td class="feature-col">Counterparty risk</td><td>High (bankruptcy, fraud)</td><td>None</td><td>None</td></tr>
+          <tr><td class="feature-col">Best for</td><td>Active trading only</td><td>Small daily amounts</td><td>Savings & long-term holding</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box tip">
+        <div class="info-box-label">✅ Advanced: Multi-Signature</div>
+        <p>For larger holdings, consider a multi-signature (multisig) setup — requiring 2-of-3 or 3-of-5 keys to authorise a transaction. This means no single key compromise can steal your funds. Services like Unchained Capital, Casa, and Nunchuk offer guided multisig setups that balance security with usability. Think of it as a safety deposit box that requires multiple keys to open.</p>
+      </div>
+
+      <div class="info-box example">
+        <div class="info-box-label">📌 The FTX Lesson</div>
+        <p>In November 2022, the FTX exchange — once valued at $32 billion — collapsed overnight. Millions of customers lost access to billions of dollars worth of crypto they had left on the platform. The founder was later convicted of fraud. This wasn't a hack — it was mismanagement and fraud by a trusted custodian. Every user who had self-custodied was unaffected. This is why "not your keys, not your coins" exists.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(6)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- LESSON 7 -->
+    <div class="lesson reveal" id="lesson7">
+      <div class="lesson-num">Module 07</div>
+      <h2>Reading the Mempool & Fee Markets</h2>
+      <p>The <strong>mempool</strong> (memory pool) is Bitcoin's waiting room — the collection of all valid transactions that have been broadcast to the network but haven't yet been included in a block. Understanding the mempool is essential for timing transactions and managing fees intelligently.</p>
+      <p>When you send Bitcoin, you attach a fee measured in <strong>satoshis per virtual byte</strong> (sat/vB). Miners are economically rational — they include the highest-fee transactions first. Your transaction's position in the queue depends entirely on what fee you offer relative to everyone else.</p>
+
+      <div class="diagram">
+        <div class="diagram-title">Fee Priority Levels</div>
+        <div class="flow-steps">
+          <div class="flow-step" style="border-color: var(--accent-green);"><span class="step-emoji">🐢</span> Low Priority<br><small style="color:var(--text-muted);">1–5 sat/vB<br>Hours to days</small></div>
+          <div class="flow-step" style="border-color: var(--btc-orange);"><span class="step-emoji">🚶</span> Medium Priority<br><small style="color:var(--text-muted);">10–30 sat/vB<br>30 min – 2 hrs</small></div>
+          <div class="flow-step" style="border-color: var(--accent-red);"><span class="step-emoji">🚀</span> High Priority<br><small style="color:var(--text-muted);">50–100+ sat/vB<br>Next 1–2 blocks</small></div>
+        </div>
+      </div>
+
+      <p><strong>When to send:</strong> The mempool fluctuates dramatically. During weekends and late nights (UTC), it's often nearly empty — you can send transactions for 1–3 sat/vB. During hype events, NFT mints, or heavy trading periods, fees can spike to 200+ sat/vB. Patience saves money.</p>
+
+      <div class="info-box tip">
+        <div class="info-box-label">✅ Pro Tips</div>
+        <p><strong>Mempool.space</strong> is the best free tool for visualising the mempool in real-time — it shows pending transaction volume, fee estimates, and block predictions. Use it before every transaction. Many wallets also support <strong>RBF (Replace-By-Fee)</strong>, which lets you bump a stuck transaction's fee if it's taking too long. Always enable RBF when available.</p>
+      </div>
+
+      <p><strong>The Long-Term Fee Market:</strong> As block rewards halve every 4 years and eventually approach zero (around 2140), transaction fees will become the primary incentive for miners. This means Bitcoin's long-term security depends on a robust fee market. The development of Ordinals, BRC-20 tokens, and other on-chain activity — while controversial — actually contributes to this fee revenue, supporting long-term network security.</p>
+
+      <div class="info-box insight">
+        <div class="info-box-label">💡 UTXO Management</div>
+        <p>Advanced users practise "UTXO consolidation" — combining many small UTXOs into fewer large ones during low-fee periods. This is like exchanging a jar of coins for notes. Spending many small UTXOs in a single transaction is expensive because each input adds to the transaction size. Consolidating when fees are low saves significant money when fees spike later.</p>
+      </div>
+
+      <button class="lesson-complete-btn" onclick="completeLesson(7)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section" id="quiz">
+      <div class="quiz-header">
+        <h2>Intermediate <span>Quiz</span></h2>
+        <p>Test your deeper knowledge. Score 70% or higher to earn your certificate.</p>
+      </div>
+      <div class="quiz-progress" id="quizProgress">
+        Question <span id="currentQ">1</span> of <span id="totalQ">12</span>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+      </div>
+      <div id="quizContainer"></div>
+      <div class="quiz-results" id="quizResults">
+        <div class="results-score-ring" id="scoreRing">
+          <div class="results-percent" id="scorePercent"></div>
+          <div class="results-label">Score</div>
+        </div>
+        <h2 class="results-title" id="resultsTitle"></h2>
+        <p class="results-desc" id="resultsDesc"></p>
+        <div class="results-breakdown">
+          <div class="breakdown-item"><div class="breakdown-num green" id="correctCount"></div><div class="breakdown-label">Correct</div></div>
+          <div class="breakdown-item"><div class="breakdown-num red" id="incorrectCount"></div><div class="breakdown-label">Incorrect</div></div>
+        </div>
+        <div class="quiz-nav">
+          <button class="quiz-btn quiz-btn-ghost" onclick="retakeQuiz()">Retake Quiz</button>
+          <a href="bitcoin-education.html" class="quiz-btn quiz-btn-primary" style="text-decoration:none;">Back to Academy</a>
+        </div>
+        <div class="certificate-container" id="certContainer">
+          <div class="certificate">
+            <div class="cert-badge">⚡</div>
+            <div class="cert-pre">Certificate of Completion</div>
+            <div class="cert-title">Bitcoin Academy</div>
+            <div class="cert-course">Going Deeper — Intermediate</div>
+            <input type="text" class="cert-name-input" id="certName" placeholder="Enter your name here">
+            <div class="cert-date" id="certDate"></div>
+            <div class="cert-score" id="certScore"></div>
+            <div class="cert-id" id="certId"></div>
+          </div>
+          <div class="cert-actions">
+            <button class="quiz-btn quiz-btn-ghost" onclick="printCert()">🖨️ Print Certificate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ── PAYWALL ──
+  function unlockCourse() {
+    document.getElementById('paywall').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  // ── LESSON COMPLETION ──
+  const completedLessons = new Set();
+  function completeLesson(num) {
+    completedLessons.add(num);
+    const btn = event.target;
+    btn.textContent = '✓ Completed';
+    btn.classList.add('done');
+    const link = document.querySelector(`.sidebar-nav a[data-lesson="${num}"]`);
+    if (link) link.classList.add('completed');
+    document.getElementById('completedCount').textContent = completedLessons.size;
+    document.getElementById('sidebarProgress').style.width = `${(completedLessons.size / 7) * 100}%`;
+  }
+
+  // ── SIDEBAR ACTIVE ──
+  const lessons = document.querySelectorAll('.lesson, .quiz-section');
+  const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+  const sidebarObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-100px 0px -50% 0px' });
+  lessons.forEach(l => sidebarObserver.observe(l));
+
+  // ── SCROLL PROGRESS ──
+  window.addEventListener('scroll', () => {
+    const pct = Math.min((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100, 100);
+    document.getElementById('progressBar').style.width = `${pct}%`;
+  });
+
+  // ── REVEAL ──
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }});
+  }, { threshold: 0.1 });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // ── QUIZ ──
+  const quizQuestions = [
+    {
+      question: "What is the primary purpose of Bitcoin's difficulty adjustment?",
+      options: ["To make mining more profitable", "To maintain approximately 10-minute block intervals regardless of hash rate", "To reduce energy consumption", "To limit the number of miners"],
+      correct: 1,
+      explanation: "The difficulty adjustment recalibrates every 2,016 blocks to ensure blocks are found roughly every 10 minutes, regardless of how much or how little hash power is on the network."
+    },
+    {
+      question: "After the 2024 halving, what is Bitcoin's block reward?",
+      options: ["6.25 BTC", "12.5 BTC", "3.125 BTC", "1.5625 BTC"],
+      correct: 2,
+      explanation: "The 2024 halving reduced the block reward from 6.25 to 3.125 BTC per block."
+    },
+    {
+      question: "What does the MVRV ratio compare?",
+      options: ["Mining cost vs revenue", "Market Value vs Realised Value", "Miner Volume vs Retail Volume", "Market Velocity vs Reserve Value"],
+      correct: 1,
+      explanation: "MVRV compares the current market capitalisation to the realised capitalisation (aggregate cost basis). Values above 3 suggest overheating; below 1 suggests undervaluation."
+    },
+    {
+      question: "In on-chain analysis, what typically signals that long-term holders are accumulating?",
+      options: ["High exchange inflows", "Increasing UTXO age (coins not moving)", "Rising transaction fees", "Decreasing hash rate"],
+      correct: 1,
+      explanation: "When coins remain unmoved for long periods, it indicates holders are accumulating rather than selling. This 'ageing' of UTXOs is a bullish on-chain signal."
+    },
+    {
+      question: "How does the Lightning Network achieve near-instant payments?",
+      options: ["By using a faster blockchain", "By removing security checks", "By conducting transactions off-chain in payment channels, settling on-chain only when channels open or close", "By using centralised servers"],
+      correct: 2,
+      explanation: "Lightning moves transactions off the main chain into bilateral payment channels. Thousands of transactions occur off-chain, with only the opening and closing transactions recorded on the Bitcoin blockchain."
+    },
+    {
+      question: "What is Lightning Network 'routing'?",
+      options: ["Sending Bitcoin to the wrong address", "Finding a path through multiple connected channels to pay someone you don't have a direct channel with", "A type of mining", "Redirecting failed transactions"],
+      correct: 1,
+      explanation: "Routing allows payments to hop through multiple channels. If Alice→Bob→Carol have channels, Alice can pay Carol through Bob, trustlessly and automatically."
+    },
+    {
+      question: "What does 'immaculate conception' refer to in the context of Bitcoin vs altcoins?",
+      options: ["Bitcoin's creation by a divine force", "Bitcoin launched with no pre-mine, no ICO, and no insider allocation — a fair launch never replicated", "Bitcoin was the first cryptocurrency", "Bitcoin's whitepaper was perfectly written"],
+      correct: 1,
+      explanation: "Bitcoin had no pre-mine, no ICO, no VC funding, and no insider token allocation. Satoshi mined alongside everyone else. This fair launch has never been replicated by any subsequent cryptocurrency."
+    },
+    {
+      question: "Why is multi-signature (multisig) recommended for larger Bitcoin holdings?",
+      options: ["It makes transactions faster", "It reduces fees", "No single compromised key can steal funds — multiple keys are required to authorise a transaction", "It increases privacy"],
+      correct: 2,
+      explanation: "A 2-of-3 multisig means an attacker would need to compromise two separate keys (potentially stored in different locations/devices) to steal funds, dramatically improving security."
+    },
+    {
+      question: "What does 'sat/vB' measure?",
+      options: ["The price of Bitcoin in satoshis", "The speed of a transaction", "The fee rate in satoshis per virtual byte of transaction data", "The mining difficulty"],
+      correct: 2,
+      explanation: "Transaction fees are priced per unit of data. A fee of 10 sat/vB means you pay 10 satoshis for each virtual byte your transaction occupies in a block."
+    },
+    {
+      question: "Why is UTXO consolidation a useful practice?",
+      options: ["It increases your Bitcoin balance", "It makes your wallet look cleaner", "Combining many small UTXOs during low-fee periods saves money when fees spike later", "It's required by Bitcoin's protocol"],
+      correct: 2,
+      explanation: "Spending many small UTXOs is expensive because each input adds data to the transaction. Consolidating during low-fee periods (like weekends) reduces future transaction costs significantly."
+    },
+    {
+      question: "What happened to FTX that reinforces the importance of self-custody?",
+      options: ["It was hacked by anonymous attackers", "The founder mismanaged and defrauded customers, and billions in customer funds were lost", "It voluntarily shut down", "Its software had a critical bug"],
+      correct: 1,
+      explanation: "FTX collapsed due to fraud and mismanagement by its founder, who was later convicted. Customers lost access to billions. Anyone who had self-custodied their Bitcoin was completely unaffected."
+    },
+    {
+      question: "Why will Bitcoin's long-term security depend on a robust fee market?",
+      options: ["Because miners need expensive hardware", "Because block rewards halve every ~4 years and will eventually approach zero, making transaction fees the primary miner incentive", "Because fees fund Bitcoin's development team", "Because the protocol requires minimum fees"],
+      correct: 1,
+      explanation: "As the block reward trends toward zero (reaching it around 2140), transaction fees must sustain miner incentives. A healthy fee market ensures miners remain economically motivated to secure the network."
+    }
+  ];
+
+  let currentQuestion = 0, score = 0, answered = false;
+
+  function renderQuestion() {
+    const q = quizQuestions[currentQuestion];
+    const letters = ['A', 'B', 'C', 'D'];
+    answered = false;
+    document.getElementById('currentQ').textContent = currentQuestion + 1;
+    document.getElementById('quizProgressFill').style.width = `${(currentQuestion / quizQuestions.length) * 100}%`;
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question-card">
+        <div class="question-num">Question ${currentQuestion + 1} of ${quizQuestions.length}</div>
+        <div class="question-text">${q.question}</div>
+        <div class="quiz-options">
+          ${q.options.map((opt, i) => `
+            <div class="quiz-option" onclick="selectAnswer(${i})" id="option-${i}">
+              <span class="option-letter">${letters[i]}</span><span>${opt}</span>
+            </div>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="feedback"></div>
+        <div class="quiz-nav">
+          <button class="quiz-btn quiz-btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+            ${currentQuestion === quizQuestions.length - 1 ? 'See Results' : 'Next Question →'}
+          </button>
+        </div>
+      </div>`;
+  }
+
+  function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+    const q = quizQuestions[currentQuestion];
+    const isCorrect = index === q.correct;
+    if (isCorrect) score++;
+    document.querySelectorAll('.quiz-option').forEach((opt, i) => {
+      opt.style.pointerEvents = 'none';
+      if (i === q.correct) opt.classList.add('correct');
+      else if (i === index && !isCorrect) opt.classList.add('incorrect');
+    });
+    const feedback = document.getElementById('feedback');
+    feedback.classList.add('show', isCorrect ? 'correct-feedback' : 'incorrect-feedback');
+    feedback.innerHTML = `<strong>${isCorrect ? '✓ Correct!' : '✗ Not quite.'}</strong> ${q.explanation}`;
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= quizQuestions.length) showResults();
+    else renderQuestion();
+  }
+
+  function showResults() {
+    const pct = Math.round((score / quizQuestions.length) * 100);
+    const passed = pct >= 70;
+    document.getElementById('quizContainer').style.display = 'none';
+    document.getElementById('quizProgress').style.display = 'none';
+    document.getElementById('quizResults').classList.add('show');
+    document.getElementById('scoreRing').classList.add(passed ? 'pass' : 'fail');
+    document.getElementById('scorePercent').textContent = `${pct}%`;
+    document.getElementById('correctCount').textContent = score;
+    document.getElementById('incorrectCount').textContent = quizQuestions.length - score;
+
+    if (passed) {
+      document.getElementById('resultsTitle').textContent = '🎉 Intermediate Complete!';
+      document.getElementById('resultsDesc').textContent = `You scored ${score}/${quizQuestions.length} and passed the Going Deeper course! You now have a strong understanding of Bitcoin's mechanics, economics, and infrastructure.`;
+      const now = new Date();
+      document.getElementById('certDate').textContent = 'Completed: ' + now.toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('certScore').textContent = `Score: ${pct}% (${score}/${quizQuestions.length})`;
+      document.getElementById('certId').textContent = 'Certificate ID: BTC-INT-' + now.getFullYear() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+      document.getElementById('certContainer').classList.add('show');
+    } else {
+      document.getElementById('resultsTitle').textContent = 'Almost There!';
+      document.getElementById('resultsDesc').textContent = `You scored ${score}/${quizQuestions.length}. You need 70% to pass. Review the lessons and try again!`;
+    }
+  }
+
+  function retakeQuiz() {
+    currentQuestion = 0; score = 0;
+    document.getElementById('quizContainer').style.display = 'block';
+    document.getElementById('quizProgress').style.display = 'block';
+    document.getElementById('quizResults').classList.remove('show');
+    document.getElementById('scoreRing').classList.remove('pass', 'fail');
+    document.getElementById('certContainer').classList.remove('show');
+    renderQuestion();
+  }
+
+  function printCert() {
+    var nameInput = document.getElementById('certName');
+    if (!nameInput.value.trim()) {
+      nameInput.focus();
+      nameInput.style.borderBottomColor = '#FF4D6A';
+      setTimeout(function() { nameInput.style.borderBottomColor = ''; }, 2000);
+      return;
+    }
+    window.print();
+  }
+
+  renderQuestion();
+</script>
+</body>
+</html>

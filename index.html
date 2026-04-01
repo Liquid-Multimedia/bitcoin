@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>₿itcoin Academy — Understanding Bitcoin</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --btc-orange: #F7931A;
+    --btc-gold: #FFB800;
+    --btc-dark: #0A0A0F;
+    --btc-deeper: #06060A;
+    --surface: #111118;
+    --surface-light: #1A1A24;
+    --surface-hover: #22222E;
+    --text-primary: #F0EDE6;
+    --text-secondary: #8A8697;
+    --text-muted: #5A566A;
+    --accent-blue: #4A9EFF;
+    --accent-green: #00D68F;
+    --accent-red: #FF4D6A;
+    --glow: rgba(247, 147, 26, 0.15);
+    --font-display: 'Anybody', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--btc-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.65;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--btc-deeper); }
+  ::-webkit-scrollbar-thumb { background: var(--btc-orange); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    background: rgba(10, 10, 15, 0.7);
+    border-bottom: 1px solid rgba(247, 147, 26, 0.1);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--btc-orange);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--btc-orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--btc-dark);
+    font-weight: 900;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover { color: var(--btc-orange); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(247, 147, 26, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--btc-orange), transparent);
+    opacity: 0.3;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(247, 147, 26, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247, 147, 26, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(247, 147, 26, 0.1);
+    border: 1px solid rgba(247, 147, 26, 0.2);
+    border-radius: 100px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.8rem;
+    color: var(--btc-orange);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    animation: fadeDown 0.8s ease-out;
+  }
+
+  .hero-badge .pulse {
+    width: 8px;
+    height: 8px;
+    background: var(--btc-orange);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease-out 0.2s both;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 1s ease-out 0.4s both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    animation: fadeUp 1s ease-out 0.6s both;
+  }
+
+  .btn {
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--btc-orange);
+    color: var(--btc-dark);
+    box-shadow: 0 0 30px rgba(247, 147, 26, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(247, 147, 26, 0.5);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--btc-orange);
+    color: var(--btc-orange);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    animation: fadeUp 1s ease-out 0.8s both;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat .number {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--btc-orange);
+  }
+
+  .hero-stat .label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.25rem;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION SHARED ── */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--btc-orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    letter-spacing: -1.5px;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 650px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── WHAT IS BITCOIN ── */
+  .what-is {
+    position: relative;
+  }
+
+  .what-is-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .what-is-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+
+  .what-is-content strong {
+    color: var(--text-primary);
+  }
+
+  .concept-visual {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-visual::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold), var(--btc-orange));
+  }
+
+  .block-chain-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .block {
+    background: var(--surface-light);
+    border: 1px solid rgba(247, 147, 26, 0.15);
+    border-radius: 10px;
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .block:hover {
+    border-color: var(--btc-orange);
+    transform: translateX(5px);
+    box-shadow: -4px 0 20px rgba(247, 147, 26, 0.1);
+  }
+
+  .block-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--btc-orange);
+    background: rgba(247, 147, 26, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .block-hash {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .block-link {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    text-align: center;
+    line-height: 1;
+  }
+
+  /* ── KEY CONCEPTS ── */
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--glow), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .concept-card:hover::before { opacity: 1; }
+  .concept-card:hover {
+    border-color: rgba(247, 147, 26, 0.2);
+    transform: translateY(-4px);
+  }
+
+  .concept-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(247, 147, 26, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+
+  .concept-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    position: relative;
+  }
+
+  .concept-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-container {
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--btc-orange), rgba(247, 147, 26, 0.1));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.95rem;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    background: var(--btc-orange);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(247, 147, 26, 0.4);
+  }
+
+  .timeline-year {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--btc-orange);
+    margin-bottom: 0.3rem;
+    letter-spacing: 1px;
+  }
+
+  .timeline-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    max-width: 600px;
+  }
+
+  /* ── HOW MINING WORKS ── */
+  .mining-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .mining-steps::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--btc-orange), var(--btc-gold), var(--accent-green));
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .mining-step {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--btc-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.2rem;
+    transition: all 0.3s;
+  }
+
+  .mining-step:hover .step-circle {
+    background: rgba(247, 147, 26, 0.1);
+    box-shadow: 0 0 30px rgba(247, 147, 26, 0.2);
+    transform: scale(1.1);
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--btc-orange);
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+  }
+
+  .mining-step h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .mining-step p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* ── MYTHS ── */
+  .myths-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .myth-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s;
+  }
+
+  .myth-card:hover {
+    border-color: rgba(247, 147, 26, 0.15);
+  }
+
+  .myth-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+  }
+
+  .myth-label.myth {
+    color: var(--accent-red);
+    background: rgba(255, 77, 106, 0.1);
+  }
+
+  .myth-label.fact {
+    color: var(--accent-green);
+    background: rgba(0, 214, 143, 0.1);
+  }
+
+  .myth-card h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .myth-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* ── WHY IT MATTERS ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .why-card {
+    background: linear-gradient(145deg, var(--surface), var(--surface-light));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s;
+  }
+
+  .why-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(247, 147, 26, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .why-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .why-card h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .why-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* ── HALVING SECTION ── */
+  .halving-visual {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 3rem;
+    margin-top: 2rem;
+  }
+
+  .halving-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    height: 250px;
+    margin-bottom: 1.5rem;
+  }
+
+  .halving-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .halving-bar {
+    width: 100%;
+    max-width: 80px;
+    background: linear-gradient(to top, var(--btc-orange), var(--btc-gold));
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .halving-bar:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 30px rgba(247, 147, 26, 0.3);
+  }
+
+  .halving-bar .reward {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--btc-orange);
+    white-space: nowrap;
+  }
+
+  .halving-bar-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.8rem;
+    text-align: center;
+  }
+
+  .halving-note {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .halving-note strong {
+    color: var(--btc-orange);
+  }
+
+  /* ── GLOSSARY ── */
+
+  /* ── COURSES ── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .course-card {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s;
+    position: relative;
+  }
+
+  .course-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(247, 147, 26, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .course-header {
+    padding: 2rem 2rem 1.2rem;
+    position: relative;
+  }
+
+  .course-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .course-level.beginner {
+    color: var(--accent-green);
+    background: rgba(0, 214, 143, 0.1);
+    border: 1px solid rgba(0, 214, 143, 0.2);
+  }
+
+  .course-level.intermediate {
+    color: var(--btc-orange);
+    background: rgba(247, 147, 26, 0.1);
+    border: 1px solid rgba(247, 147, 26, 0.2);
+  }
+
+  .course-level.advanced {
+    color: var(--accent-red);
+    background: rgba(255, 77, 106, 0.1);
+    border: 1px solid rgba(255, 77, 106, 0.2);
+  }
+
+  .course-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .course-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .course-card .course-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .course-body {
+    padding: 0 2rem 1.5rem;
+  }
+
+  .course-modules {
+    list-style: none;
+    margin-top: 1rem;
+  }
+
+  .course-modules li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+
+  .course-modules li:hover {
+    color: var(--text-primary);
+  }
+
+  .module-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(247, 147, 26, 0.08);
+    border: 1px solid rgba(247, 147, 26, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--btc-orange);
+    flex-shrink: 0;
+  }
+
+  .course-footer {
+    padding: 1.2rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .course-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .course-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .course-btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--btc-orange);
+    background: transparent;
+    color: var(--btc-orange);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+
+  .course-btn:hover {
+    background: var(--btc-orange);
+    color: var(--btc-dark);
+    box-shadow: 0 0 25px rgba(247, 147, 26, 0.3);
+  }
+
+  .course-card.locked {
+    opacity: 0.6;
+  }
+
+  .course-card.locked:hover {
+    opacity: 0.8;
+  }
+
+  .lock-overlay {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .courses-note {
+    text-align: center;
+    margin-top: 2.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .courses-note strong {
+    color: var(--btc-orange);
+  }
+
+  /* ── NEWSLETTER ── */
+  .newsletter-section {
+    position: relative;
+  }
+
+  .newsletter-wrapper {
+    background: linear-gradient(145deg, var(--surface), var(--surface-light));
+    border: 1px solid rgba(247, 147, 26, 0.12);
+    border-radius: 24px;
+    padding: 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .newsletter-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(247, 147, 26, 0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .newsletter-content h2 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .newsletter-content h2 span {
+    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .newsletter-content p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .newsletter-perks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .newsletter-perks li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .newsletter-perks .perk-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 214, 143, 0.1);
+    border: 1px solid rgba(0, 214, 143, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: var(--accent-green);
+    flex-shrink: 0;
+  }
+
+  .newsletter-form-area {
+    position: relative;
+    z-index: 1;
+  }
+
+  .newsletter-form-card {
+    background: var(--btc-dark);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2.5rem;
+  }
+
+  .newsletter-form-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .newsletter-form-card .form-sub {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+
+  .form-group input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--btc-orange);
+    box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.1);
+  }
+
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238A8697' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .form-group select option {
+    background: var(--surface);
+    color: var(--text-primary);
+  }
+
+  .subscribe-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--btc-orange);
+    color: var(--btc-dark);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
+  }
+
+  .subscribe-btn:hover {
+    box-shadow: 0 0 40px rgba(247, 147, 26, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .form-note {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .success-message {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .success-message.show {
+    display: block;
+  }
+
+  .success-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .success-message h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-green);
+  }
+
+  .success-message p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .courses-grid { grid-template-columns: 1fr; }
+    .newsletter-wrapper { grid-template-columns: 1fr; padding: 2.5rem; }
+  }
+
+  /* ── GLOSSARY (original) ── */
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .glossary-item {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s;
+  }
+
+  .glossary-item:hover {
+    border-color: rgba(247, 147, 26, 0.15);
+  }
+
+  .glossary-term {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--btc-orange);
+    margin-bottom: 0.3rem;
+  }
+
+  .glossary-def {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  footer .footer-btc {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--btc-orange);
+    margin-bottom: 0.5rem;
+  }
+
+  footer p { margin-bottom: 0.3rem; }
+
+  footer a {
+    color: var(--btc-orange);
+    text-decoration: none;
+  }
+
+  /* ── QUOTE CALLOUT ── */
+  .callout {
+    background: linear-gradient(135deg, rgba(247, 147, 26, 0.05), rgba(247, 147, 26, 0.02));
+    border-left: 3px solid var(--btc-orange);
+    border-radius: 0 12px 12px 0;
+    padding: 2rem 2.5rem;
+    margin: 3rem 0;
+    position: relative;
+  }
+
+  .callout p {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  .callout cite {
+    display: block;
+    margin-top: 0.8rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: normal;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .what-is-grid,
+    .myths-grid { grid-template-columns: 1fr; }
+    .mining-steps { grid-template-columns: 1fr 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+    .nav-links { display: none; }
+    .halving-bars { gap: 0.8rem; }
+  }
+
+  @media (max-width: 600px) {
+    .mining-steps { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 1rem; }
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">₿</div>
+    Bitcoin <span style="color: var(--text-primary);">Academy</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#what">What</a></li>
+    <li><a href="#concepts">Concepts</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#mining">Mining</a></li>
+    <li><a href="#halving">Halving</a></li>
+    <li><a href="#myths">Myths</a></li>
+    <li><a href="dashboard.html" target="_blank">Dashboard</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">
+    <span class="pulse"></span>
+    Open-Source Money
+  </div>
+  <h1><span style="font-size: 0.55em; display: block; letter-spacing: 2px; -webkit-text-fill-color: var(--text-primary);">Understanding</span><span>Bitcoin</span></h1>
+  <p class="hero-sub">A comprehensive, beginner-friendly guide to the world's first decentralised digital currency — how it works, why it matters, and what you need to know.</p>
+  <div class="hero-cta">
+    <a href="#what" class="btn btn-primary">Start Learning</a>
+    <a href="dashboard.html" class="btn btn-ghost">📊 Live Dashboard</a>
+    <a href="#glossary" class="btn btn-ghost">Glossary</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="number">21M</div>
+      <div class="label">Max Supply</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number">2009</div>
+      <div class="label">Year Created</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number">~10min</div>
+      <div class="label">Block Time</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number">0</div>
+      <div class="label">Central Authority</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS BITCOIN -->
+<section id="what" class="what-is">
+  <div class="reveal">
+    <span class="section-label">// 01 — The Basics</span>
+    <h2 class="section-title">What is Bitcoin?</h2>
+  </div>
+  <div class="what-is-grid">
+    <div class="what-is-content reveal">
+      <p>Bitcoin is a <strong>peer-to-peer electronic cash system</strong> that allows people to send value directly to one another without relying on banks, governments, or any centralised intermediary. It was introduced in 2008 by a pseudonymous person (or group) called <strong>Satoshi Nakamoto</strong>.</p>
+      <p>Think of it like email for money. Before email, you needed a postal service to deliver letters. Before Bitcoin, you needed a bank to transfer money. Bitcoin removes the middleman — it lets you be your own bank.</p>
+      <p>Every Bitcoin transaction is recorded on a public, tamper-proof ledger called the <strong>blockchain</strong>. This ledger isn't stored in one place — it's distributed across thousands of computers worldwide, meaning no single entity controls it.</p>
+      <p><strong>Key insight:</strong> Bitcoin separates money from the state. For the first time in modern history, there exists a monetary network that no government or corporation controls, with a supply schedule written in code that no one can alter. This is its most radical feature — not the technology, but the <em>monetary policy</em>.</p>
+
+      <div class="callout">
+        <p>"The root problem with conventional currency is all the trust that's required to make it work."</p>
+        <cite>— Satoshi Nakamoto, 2009</cite>
+      </div>
+    </div>
+    <div class="concept-visual reveal">
+      <h3 style="font-family: var(--font-display); font-weight: 700; margin-bottom: 1.5rem; font-size: 1.1rem;">How Blocks Link Together</h3>
+      <div class="block-chain-visual">
+        <div class="block">
+          <span class="block-num">Block #1</span>
+          <span class="block-hash">0000000000019d6...a48</span>
+        </div>
+        <div class="block-link">↓ hash reference</div>
+        <div class="block">
+          <span class="block-num">Block #2</span>
+          <span class="block-hash">00000000839a8e6...d18</span>
+        </div>
+        <div class="block-link">↓ hash reference</div>
+        <div class="block">
+          <span class="block-num">Block #3</span>
+          <span class="block-hash">000000006a625f0...e63</span>
+        </div>
+        <div class="block-link">↓ hash reference</div>
+        <div class="block">
+          <span class="block-num">Block #N</span>
+          <span class="block-hash">Each block contains the previous block's hash, creating an unbreakable chain...</span>
+        </div>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1.5rem; font-family: var(--font-mono);">Altering one block would invalidate every block after it — making fraud computationally impossible.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KEY CONCEPTS -->
+<section id="concepts">
+  <div class="reveal">
+    <span class="section-label">// 02 — Core Ideas</span>
+    <h2 class="section-title">Key Concepts</h2>
+    <p class="section-desc">Bitcoin introduces several groundbreaking ideas. Here are the ones that matter most.</p>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <div class="concept-icon">🔐</div>
+      <h3>Decentralisation</h3>
+      <p>No single entity — no company, government, or individual — controls Bitcoin. The network is maintained by thousands of independent nodes (computers) around the world, each holding a full copy of the blockchain. This makes Bitcoin resistant to censorship, seizure, and single points of failure.</p>
+    </div>
+    <div class="concept-card reveal">
+      <div class="concept-icon">🔑</div>
+      <h3>Public & Private Keys</h3>
+      <p>Your Bitcoin is secured by cryptography. You have a <strong>public key</strong> (like an email address — safe to share) and a <strong>private key</strong> (like a password — never share it). Whoever holds the private key controls the Bitcoin. "Not your keys, not your coins" is the mantra.</p>
+    </div>
+    <div class="concept-card reveal">
+      <div class="concept-icon">📖</div>
+      <h3>Transparent Ledger</h3>
+      <p>Every transaction ever made is publicly visible on the blockchain. Anyone can audit the supply and trace any transaction. This radical transparency is what allows trustless verification — you don't need to trust anyone because you can verify everything yourself.</p>
+    </div>
+    <div class="concept-card reveal">
+      <div class="concept-icon">⏱️</div>
+      <h3>Scarcity by Design</h3>
+      <p>There will only ever be 21 million Bitcoin. This is hardcoded into the protocol and enforced by every node on the network. Unlike fiat currencies — which central banks can print at will — Bitcoin's supply is mathematically fixed, making it deflationary by nature.</p>
+    </div>
+    <div class="concept-card reveal">
+      <div class="concept-icon">🌍</div>
+      <h3>Borderless & Permissionless</h3>
+      <p>Anyone with an internet connection can use Bitcoin, regardless of nationality, credit score, or banking status. There's no application process, no approval needed. This is especially powerful for the 1.4 billion adults worldwide who remain unbanked.</p>
+    </div>
+    <div class="concept-card reveal">
+      <div class="concept-icon">⚡</div>
+      <h3>The Lightning Network</h3>
+      <p>A "Layer 2" protocol built on top of Bitcoin that enables near-instant, low-cost transactions. While on-chain Bitcoin transactions take ~10 minutes, Lightning payments settle in milliseconds — enabling everyday purchases like buying coffee with Bitcoin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="reveal">
+    <span class="section-label">// 03 — History</span>
+    <h2 class="section-title">Bitcoin Timeline</h2>
+    <p class="section-desc">From a whitepaper to a trillion-dollar asset — the key moments in Bitcoin's journey.</p>
+  </div>
+  <div class="timeline-container">
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2008</div>
+      <div class="timeline-title">The Whitepaper</div>
+      <div class="timeline-desc">Satoshi Nakamoto publishes "Bitcoin: A Peer-to-Peer Electronic Cash System" — a 9-page paper outlining a revolutionary approach to digital money that solves the double-spending problem without a trusted third party.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2009</div>
+      <div class="timeline-title">Genesis Block</div>
+      <div class="timeline-desc">On January 3rd, Satoshi mines the first Bitcoin block, embedding a newspaper headline about bank bailouts in the block data — a clear statement of intent about why Bitcoin was created.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2010</div>
+      <div class="timeline-title">The Pizza Transaction</div>
+      <div class="timeline-desc">Laszlo Hanyecz pays 10,000 BTC for two pizzas — the first known real-world Bitcoin transaction. Those coins would later be worth hundreds of millions of dollars, making them the most expensive pizzas in history.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2011</div>
+      <div class="timeline-title">Parity with the US Dollar</div>
+      <div class="timeline-desc">Bitcoin reaches $1.00 for the first time. Critics called it a fad. Meanwhile, early adopters saw the first proof that the market was assigning real economic value to digital scarcity.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2013</div>
+      <div class="timeline-title">First Major Rally</div>
+      <div class="timeline-desc">Bitcoin surges past $1,000 for the first time, drawing mainstream media attention and beginning the pattern of boom-and-bust cycles that would define Bitcoin's price discovery process.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2017</div>
+      <div class="timeline-title">The ICO Boom & $20K</div>
+      <div class="timeline-desc">Bitcoin reaches nearly $20,000 amid an explosion of cryptocurrency projects. The "block size wars" result in Bitcoin prioritising decentralisation over throughput — a defining philosophical choice.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2021</div>
+      <div class="timeline-title">Nation-State Adoption</div>
+      <div class="timeline-desc">El Salvador becomes the first country to adopt Bitcoin as legal tender. Major companies like Tesla add Bitcoin to their balance sheets. Bitcoin reaches an all-time high near $69,000.</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2024</div>
+      <div class="timeline-title">Spot ETF Approval & $100K</div>
+      <div class="timeline-desc">The U.S. SEC approves spot Bitcoin ETFs, opening the floodgates for institutional investment. Bitcoin crosses $100,000 for the first time, cementing its status as a legitimate asset class on the global stage.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MINING -->
+<section id="mining">
+  <div class="reveal">
+    <span class="section-label">// 04 — Proof of Work</span>
+    <h2 class="section-title">How Mining Works</h2>
+    <p class="section-desc">Mining is how new Bitcoin is created and transactions are validated. It's the heartbeat of the network.</p>
+  </div>
+  <div class="mining-steps reveal">
+    <div class="mining-step">
+      <div class="step-num">STEP 01</div>
+      <div class="step-circle">📡</div>
+      <h4>Transactions Broadcast</h4>
+      <p>When you send Bitcoin, your transaction is broadcast to the network and sits in a waiting area called the "mempool" alongside other pending transactions.</p>
+    </div>
+    <div class="mining-step">
+      <div class="step-num">STEP 02</div>
+      <div class="step-circle">📦</div>
+      <h4>Block Assembly</h4>
+      <p>Miners collect pending transactions into a candidate block. They typically prioritise transactions with higher fees, as these fees are part of their reward.</p>
+    </div>
+    <div class="mining-step">
+      <div class="step-num">STEP 03</div>
+      <div class="step-circle">⚙️</div>
+      <h4>Solving the Puzzle</h4>
+      <p>Miners race to find a special number (nonce) that, when hashed with the block data, produces a result below a target threshold. This requires trillions of guesses per second.</p>
+    </div>
+    <div class="mining-step">
+      <div class="step-num">STEP 04</div>
+      <div class="step-circle">✅</div>
+      <h4>Block Confirmed</h4>
+      <p>The first miner to solve the puzzle broadcasts the block. Other nodes verify it's valid and add it to their chain. The winning miner receives newly minted Bitcoin plus transaction fees.</p>
+    </div>
+  </div>
+
+  <div class="callout reveal" style="margin-top: 3rem;">
+    <p><strong>Insight:</strong> Mining is often misunderstood as "wasteful" computation. In reality, it converts real-world energy into an unforgeable, tamper-proof ledger. The energy expenditure is exactly what makes Bitcoin secure — attacking the network would require outspending the combined energy output of all miners, which currently exceeds many nation-states.</p>
+  </div>
+</section>
+
+<!-- HALVING -->
+<section id="halving">
+  <div class="reveal">
+    <span class="section-label">// 05 — Supply Schedule</span>
+    <h2 class="section-title">The Halving</h2>
+    <p class="section-desc">Every ~4 years (210,000 blocks), the mining reward is cut in half. This is how Bitcoin's supply gradually approaches its 21 million cap.</p>
+  </div>
+  <div class="halving-visual reveal">
+    <div class="halving-bars">
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 100%;">
+          <span class="reward">50 BTC</span>
+        </div>
+        <div class="halving-bar-label">2009</div>
+      </div>
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 50%;">
+          <span class="reward">25 BTC</span>
+        </div>
+        <div class="halving-bar-label">2012</div>
+      </div>
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 25%;">
+          <span class="reward">12.5 BTC</span>
+        </div>
+        <div class="halving-bar-label">2016</div>
+      </div>
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 12.5%;">
+          <span class="reward">6.25 BTC</span>
+        </div>
+        <div class="halving-bar-label">2020</div>
+      </div>
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 6.25%;">
+          <span class="reward">3.125 BTC</span>
+        </div>
+        <div class="halving-bar-label">2024</div>
+      </div>
+      <div class="halving-bar-group">
+        <div class="halving-bar" style="height: 3.125%; min-height: 8px;">
+          <span class="reward">1.5625 BTC</span>
+        </div>
+        <div class="halving-bar-label">~2028</div>
+      </div>
+    </div>
+    <p class="halving-note">Each halving reduces sell pressure from miners while demand continues independently. Historically, halvings have preceded significant price appreciation — though <strong>past performance is not a guarantee of future results</strong>. The final Bitcoin is estimated to be mined around the year <strong>2140</strong>.</p>
+  </div>
+</section>
+
+<!-- WHY IT MATTERS -->
+<section>
+  <div class="reveal">
+    <span class="section-label">// 06 — The Bigger Picture</span>
+    <h2 class="section-title">Why Bitcoin Matters</h2>
+    <p class="section-desc">Beyond price speculation, Bitcoin addresses several fundamental problems with our current financial system.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-icon">🏦</div>
+      <h4>Financial Sovereignty</h4>
+      <p>In a world where bank accounts can be frozen and currencies devalued overnight, Bitcoin gives individuals the ability to hold and transfer wealth without anyone's permission.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">📉</div>
+      <h4>Inflation Hedge</h4>
+      <p>With a fixed supply of 21 million, Bitcoin is designed to resist the inflationary pressures that erode the purchasing power of government-issued currencies over time.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">🌐</div>
+      <h4>Global Remittances</h4>
+      <p>Sending money across borders via traditional channels can cost 5-10% in fees and take days. Bitcoin enables near-free, near-instant cross-border value transfer — a lifeline for migrant workers.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">🔍</div>
+      <h4>Auditability</h4>
+      <p>Unlike central banks whose balance sheets are opaque, Bitcoin's supply and every transaction are publicly verifiable by anyone. Total transparency is baked into the protocol.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">🛡️</div>
+      <h4>Censorship Resistance</h4>
+      <p>No government or institution can prevent a valid Bitcoin transaction. For people living under authoritarian regimes, this isn't a feature — it's a fundamental human right.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon">🧬</div>
+      <h4>Programmable Money</h4>
+      <p>Bitcoin introduced the concept of programmable scarcity. Smart contracts, multi-signature wallets, and time-locked transactions allow for sophisticated financial arrangements without intermediaries.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MYTHS -->
+<section id="myths">
+  <div class="reveal">
+    <span class="section-label">// 07 — Fact Check</span>
+    <h2 class="section-title">Myths vs Reality</h2>
+    <p class="section-desc">Bitcoin is surrounded by misconceptions. Let's address the most common ones head-on.</p>
+  </div>
+  <div class="myths-grid">
+    <div class="myth-card reveal">
+      <span class="myth-label myth">Myth</span>
+      <h4>"Bitcoin is only used by criminals"</h4>
+      <p>Less than 1% of Bitcoin transactions involve illicit activity (Chainalysis, 2023). In fact, Bitcoin's transparent ledger makes it one of the worst choices for crime — every transaction is permanently recorded. Cash remains the dominant medium for illegal transactions globally.</p>
+    </div>
+    <div class="myth-card reveal">
+      <span class="myth-label myth">Myth</span>
+      <h4>"Bitcoin has no intrinsic value"</h4>
+      <p>Bitcoin derives value from the same properties as gold: scarcity, durability, divisibility, portability, and fungibility — but improves on all of them digitally. Its value is backed by the energy securing the network, the code enforcing its rules, and the network effect of millions of users who trust it.</p>
+    </div>
+    <div class="myth-card reveal">
+      <span class="myth-label myth">Myth</span>
+      <h4>"It's too late to buy Bitcoin"</h4>
+      <p>Bitcoin is infinitely divisible down to 0.00000001 BTC (1 "satoshi"). You don't need to buy a whole one. If Bitcoin continues its adoption curve — currently held by roughly 4% of the global population — the potential growth remains substantial.</p>
+    </div>
+    <div class="myth-card reveal">
+      <span class="myth-label myth">Myth</span>
+      <h4>"Bitcoin wastes energy"</h4>
+      <p>Bitcoin mining increasingly uses renewable and stranded energy. A significant portion runs on hydroelectric, solar, and wind power. Many operations capture methane that would otherwise be flared. The question isn't "does Bitcoin use energy?" — it's "is the energy well-spent for securing a global monetary network?"</p>
+    </div>
+    <div class="myth-card reveal">
+      <span class="myth-label fact">Fact</span>
+      <h4>Bitcoin is pseudonymous, not anonymous</h4>
+      <p>Every transaction is permanently recorded on a public ledger. Sophisticated chain analysis firms can often trace transactions back to real-world identities. Bitcoin is more transparent than any traditional banking system.</p>
+    </div>
+    <div class="myth-card reveal">
+      <span class="myth-label fact">Fact</span>
+      <h4>You can lose your Bitcoin permanently</h4>
+      <p>If you lose your private keys and have no backup, your Bitcoin is gone forever. An estimated 3–4 million BTC are already lost. This is the trade-off for true self-custody — freedom requires responsibility.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE MODULES -->
+<section id="courses">
+  <div class="reveal">
+    <span class="section-label">// 08 — Learn</span>
+    <h2 class="section-title">Course Modules</h2>
+    <p class="section-desc">Structured learning paths from your first satoshi to running your own node. Start free, go deep.</p>
+  </div>
+  <div class="courses-grid">
+    <!-- BEGINNER -->
+    <div class="course-card reveal">
+      <div class="course-header">
+        <span class="course-level beginner">● Beginner</span>
+        <div class="course-icon">🌱</div>
+        <h3>Bitcoin Foundations</h3>
+        <p class="course-desc">Everything you need to understand what Bitcoin is, how it works at a high level, and why people care about it.</p>
+      </div>
+      <div class="course-body">
+        <ul class="course-modules">
+          <li><span class="module-icon">▶</span> What is Money? A Brief History</li>
+          <li><span class="module-icon">▶</span> Bitcoin vs Traditional Banking</li>
+          <li><span class="module-icon">▶</span> How Transactions Actually Work</li>
+          <li><span class="module-icon">▶</span> Wallets, Keys & Addresses Explained</li>
+          <li><span class="module-icon">▶</span> Buying Your First Bitcoin Safely</li>
+          <li><span class="module-icon">▶</span> Security Essentials & Common Scams</li>
+        </ul>
+      </div>
+      <div class="course-footer">
+        <div class="course-meta">
+          <span>📚 6 Modules</span>
+          <span>⏱ ~2 Hours</span>
+        </div>
+        <a href="course-beginner.html" class="course-btn" target="_blank">Free Access</a>
+      </div>
+    </div>
+
+    <!-- INTERMEDIATE -->
+    <div class="course-card reveal">
+      <div class="course-header">
+        <span class="course-level intermediate">● Intermediate</span>
+        <div class="course-icon">⚡</div>
+        <h3>Going Deeper</h3>
+        <p class="course-desc">Understand the mechanics under the hood — mining, consensus, network economics, and the Lightning Network.</p>
+      </div>
+      <div class="course-body">
+        <ul class="course-modules">
+          <li><span class="module-icon">▶</span> Proof of Work & Mining Economics</li>
+          <li><span class="module-icon">▶</span> The Halving Cycle & Supply Dynamics</li>
+          <li><span class="module-icon">▶</span> On-Chain Analysis Fundamentals</li>
+          <li><span class="module-icon">▶</span> Lightning Network Deep Dive</li>
+          <li><span class="module-icon">▶</span> Bitcoin vs Altcoins: A Framework</li>
+          <li><span class="module-icon">▶</span> Self-Custody & Hardware Wallets</li>
+          <li><span class="module-icon">▶</span> Reading the Mempool & Fee Markets</li>
+        </ul>
+      </div>
+      <div class="course-footer">
+        <div class="course-meta">
+          <span>📚 7 Modules</span>
+          <span>⏱ ~4 Hours</span>
+        </div>
+        <a href="https://liquidmultimediastore.lemonsqueezy.com/" class="course-btn" target="_blank">Enrol — $19</a>
+      </div>
+    </div>
+
+    <!-- ADVANCED -->
+    <div class="course-card reveal">
+      <div class="course-header">
+        <span class="course-level advanced">● Advanced</span>
+        <div class="course-icon">🏗️</div>
+        <h3>Bitcoin Mastery</h3>
+        <p class="course-desc">For those who want to truly understand the protocol — cryptography, scripting, node operation, and monetary theory.</p>
+      </div>
+      <div class="course-body">
+        <ul class="course-modules">
+          <li><span class="module-icon">▶</span> Elliptic Curve Cryptography</li>
+          <li><span class="module-icon">▶</span> Bitcoin Script & Transaction Types</li>
+          <li><span class="module-icon">▶</span> Running & Configuring a Full Node</li>
+          <li><span class="module-icon">▶</span> Multi-Sig & Timelock Contracts</li>
+          <li><span class="module-icon">▶</span> Taproot, Schnorr & Future Upgrades</li>
+          <li><span class="module-icon">▶</span> Austrian Economics & Bitcoin</li>
+          <li><span class="module-icon">▶</span> Game Theory of Decentralised Systems</li>
+          <li><span class="module-icon">▶</span> Building on Bitcoin: Dev Intro</li>
+        </ul>
+      </div>
+      <div class="course-footer">
+        <div class="course-meta">
+          <span>📚 8 Modules</span>
+          <span>⏱ ~6 Hours</span>
+        </div>
+        <a href="https://liquidmultimediastore.lemonsqueezy.com/" class="course-btn" target="_blank">Enrol — $39</a>
+      </div>
+    </div>
+  </div>
+  <p class="courses-note reveal">🎓 Complete all three tiers to earn your <strong>Bitcoin Academy Certificate</strong> — verifiable on-chain.</p>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" class="newsletter-section">
+  <div class="newsletter-wrapper reveal">
+    <div class="newsletter-content">
+      <h2>Stay Ahead of<br>the <span>Curve</span></h2>
+      <p>Join thousands of learners getting weekly Bitcoin insights, on-chain data breakdowns, and educational content delivered straight to their inbox. No spam, no hype — just clarity.</p>
+      <ul class="newsletter-perks">
+        <li><span class="perk-check">✓</span> Weekly market & on-chain analysis</li>
+        <li><span class="perk-check">✓</span> New course modules & lesson drops</li>
+        <li><span class="perk-check">✓</span> Myth-busting & misconception alerts</li>
+        <li><span class="perk-check">✓</span> Exclusive guides & downloadable resources</li>
+        <li><span class="perk-check">✓</span> Early access to premium content</li>
+      </ul>
+    </div>
+    <div class="newsletter-form-area">
+      <div class="newsletter-form-card" id="formCard">
+        <h3>Subscribe for Free</h3>
+        <p class="form-sub">No credit card required. Unsubscribe anytime.</p>
+        <div id="signupForm">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="Satoshi">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="satoshi@bitcoin.org">
+          </div>
+          <div class="form-group">
+            <label for="level">Your Experience Level</label>
+            <select id="level">
+              <option value="" disabled selected>Select your level...</option>
+              <option value="beginner">Complete Beginner</option>
+              <option value="curious">Curious — I've heard of Bitcoin</option>
+              <option value="holder">I own some Bitcoin</option>
+              <option value="intermediate">Intermediate — I understand the basics</option>
+              <option value="advanced">Advanced — I run a node</option>
+            </select>
+          </div>
+          <button class="subscribe-btn" onclick="handleSubscribe()">Join Bitcoin Academy →</button>
+          <p class="form-note">🔒 We respect your privacy. No spam, ever.</p>
+        </div>
+        <div class="success-message" id="successMsg">
+          <div class="success-icon">🎉</div>
+          <h3>You're In!</h3>
+          <p>Welcome to Bitcoin Academy. Check your inbox for a confirmation and your first lesson.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <div class="reveal">
+    <span class="section-label">// 10 — Reference</span>
+    <h2 class="section-title">Glossary</h2>
+    <p class="section-desc">Key terms you'll encounter in the Bitcoin world.</p>
+  </div>
+  <div class="glossary-grid">
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Blockchain</div>
+      <div class="glossary-def">A distributed, append-only ledger that records all Bitcoin transactions in sequential blocks, each cryptographically linked to the previous.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Wallet</div>
+      <div class="glossary-def">Software or hardware that stores your private keys and lets you send/receive Bitcoin. Your wallet doesn't hold Bitcoin — it holds the keys that prove ownership.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Satoshi (sat)</div>
+      <div class="glossary-def">The smallest unit of Bitcoin: 0.00000001 BTC. Named after the pseudonymous creator. Most day-to-day Bitcoin transactions are denominated in sats.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Hash Rate</div>
+      <div class="glossary-def">The total computational power of the Bitcoin mining network, measured in hashes per second. A higher hash rate means greater network security.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Mempool</div>
+      <div class="glossary-def">The "waiting room" for unconfirmed transactions. When you send Bitcoin, your transaction enters the mempool until a miner includes it in a block.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Difficulty Adjustment</div>
+      <div class="glossary-def">Every 2,016 blocks (~2 weeks), Bitcoin automatically adjusts mining difficulty to maintain ~10-minute block intervals — an elegant self-regulating mechanism.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Cold Storage</div>
+      <div class="glossary-def">Keeping private keys completely offline (on hardware wallets or paper), making them immune to hackers. Best practice for long-term holdings.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">UTXO</div>
+      <div class="glossary-def">Unspent Transaction Output — the fundamental unit of Bitcoin accounting. Instead of account balances, Bitcoin tracks individual "coins" that are spent and created in each transaction.</div>
+    </div>
+    <div class="glossary-item reveal">
+      <div class="glossary-term">Node</div>
+      <div class="glossary-def">A computer running Bitcoin software that validates and relays transactions. Full nodes store the entire blockchain and enforce all consensus rules independently.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-btc">₿itcoin <span style="color: var(--text-primary);">Academy</span></div>
+  <p>Educational content only — not financial advice.</p>
+  <p>Built with curiosity. Powered by code.</p>
+  <p style="margin-top: 1rem; color: var(--text-muted);">The Bitcoin network has been running for <span id="uptime"></span> without a single minute of downtime.</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Newsletter signup
+  function handleSubscribe() {
+    const name = document.getElementById('firstName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const level = document.getElementById('level').value;
+    
+    if (!name || !email || !level) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('successMsg').classList.add('show');
+  }
+
+  // Uptime counter
+  const genesisDate = new Date('2009-01-03T18:15:05Z');
+  function updateUptime() {
+    const now = new Date();
+    const diff = now - genesisDate;
+    const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
+    document.getElementById('uptime').textContent = `${years} years and ${days} days`;
+  }
+  updateUptime();
+  setInterval(updateUptime, 86400000);
+</script>
+
+</body>
+</html>

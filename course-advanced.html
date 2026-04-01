@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Mastery — Advanced Course | Bitcoin Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--o:#F7931A;--g:#FFB800;--dk:#0A0A0F;--sf:#111118;--sl:#1A1A24;--sh:#22222E;--t1:#F0EDE6;--t2:#8A8697;--tm:#5A566A;--gn:#00D68F;--rd:#FF4D6A;--bl:#4A9EFF;--fd:'Anybody',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--dk);color:var(--t1);overflow-x:hidden;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#06060A}::-webkit-scrollbar-thumb{background:var(--o);border-radius:3px}
+
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,10,15,.85);border-bottom:1px solid rgba(247,147,26,.1)}
+.logo{font-family:var(--fd);font-weight:900;font-size:1.4rem;color:var(--o);letter-spacing:-.5px;display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.logo-icon{width:32px;height:32px;background:var(--o);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--dk);font-weight:900}
+.nb{color:var(--t2);text-decoration:none;font-size:.85rem;transition:color .3s}.nb:hover{color:var(--o)}
+
+.pbar{position:fixed;top:65px;left:0;width:100%;height:3px;background:var(--sf);z-index:999}
+.pfill{height:100%;background:linear-gradient(90deg,var(--o),var(--g));width:0%;transition:width .5s;box-shadow:0 0 10px rgba(247,147,26,.4)}
+
+/* PAYWALL */
+.pw{position:fixed;inset:0;z-index:2000;background:rgba(6,6,10,.95);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:2rem}
+.pw.h{display:none}
+.pwc{background:var(--sf);border:1px solid rgba(247,147,26,.15);border-radius:24px;padding:3rem;max-width:520px;width:100%;text-align:center;position:relative;overflow:hidden}
+.pwc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--o),var(--g),var(--o))}
+.pwi{font-size:3rem;margin-bottom:1.2rem}
+.pwc h2{font-family:var(--fd);font-weight:900;font-size:1.8rem;margin-bottom:.5rem}
+.pwc h2 em{font-style:normal;background:linear-gradient(135deg,var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pws{color:var(--t2);font-size:.95rem;margin-bottom:2rem;line-height:1.6}
+.pwf{list-style:none;text-align:left;margin-bottom:2rem;display:flex;flex-direction:column;gap:.6rem}
+.pwf li{display:flex;align-items:center;gap:.7rem;color:var(--t2);font-size:.9rem}
+.pwf .ck{width:20px;height:20px;border-radius:50%;background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.25);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--gn);flex-shrink:0}
+.pwpr{font-family:var(--fd);font-weight:900;font-size:2.5rem;color:var(--t1);margin-bottom:.3rem}
+.pwpn{font-size:.8rem;color:var(--tm);margin-bottom:1.5rem}
+.pwm{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.pbtn{padding:.9rem 1.8rem;border-radius:12px;font-family:var(--fb);font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;border:none;display:flex;align-items:center;gap:.5rem}
+.pb1{background:var(--o);color:var(--dk);box-shadow:0 0 25px rgba(247,147,26,.3)}.pb1:hover{box-shadow:0 0 45px rgba(247,147,26,.5);transform:translateY(-2px)}
+.pb2{background:rgba(74,158,255,.1);color:var(--bl);border:1px solid rgba(74,158,255,.25)}.pb2:hover{transform:translateY(-2px)}
+.pb3{background:var(--sl);color:var(--t1);border:1px solid rgba(255,255,255,.1)}.pb3:hover{transform:translateY(-2px)}
+.pwg{font-size:.75rem;color:var(--tm);margin-top:1rem}
+.pwsk{display:block;margin-top:1.2rem;color:var(--tm);font-size:.8rem;cursor:pointer;background:none;border:none;font-family:var(--fb);text-decoration:underline;transition:color .3s}.pwsk:hover{color:var(--t2)}
+
+/* LAYOUT */
+.cl{min-height:100vh;padding-top:68px}
+.side{position:fixed;top:68px;left:0;width:260px;height:calc(100vh - 68px);background:var(--sf);border-right:1px solid rgba(255,255,255,.05);overflow-y:auto;padding:1.5rem 0;z-index:100}
+.sh{padding:0 1.5rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:1rem}
+.slv{font-family:var(--fm);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--rd);background:rgba(255,77,106,.1);padding:.2rem .6rem;border-radius:100px;display:inline-block;margin-bottom:.5rem}
+.stt{font-family:var(--fd);font-weight:700;font-size:1.1rem}
+.spr{margin-top:.8rem;font-size:.75rem;color:var(--tm);font-family:var(--fm)}
+.spb{width:100%;height:4px;background:var(--sl);border-radius:2px;margin-top:.4rem;overflow:hidden}
+.spf{height:100%;background:var(--gn);border-radius:2px;width:0%;transition:width .5s}
+.sn{list-style:none}
+.sn a{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.5rem;color:var(--t2);text-decoration:none;font-size:.85rem;transition:all .3s;border-left:3px solid transparent}
+.sn a:hover{color:var(--t1);background:rgba(255,255,255,.02)}
+.sn a.ac{color:var(--o);background:rgba(247,147,26,.05);border-left-color:var(--o)}
+.sn a.dn{color:var(--gn)}
+.sn .nm{width:24px;height:24px;border-radius:50%;background:var(--sl);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.65rem;flex-shrink:0;transition:all .3s}
+.sn a.ac .nm{background:rgba(247,147,26,.15);border-color:var(--o);color:var(--o)}
+.sn a.dn .nm{background:rgba(0,214,143,.15);border-color:var(--gn);color:var(--gn)}
+.sql{margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.sql a .nm{background:rgba(255,184,0,.1);border-color:var(--g);color:var(--g);font-size:.7rem}
+
+.main{margin-left:260px;padding:3rem 4rem 6rem;max-width:960px;min-width:0;word-wrap:break-word}
+.les{margin-bottom:5rem;padding-bottom:4rem;border-bottom:1px solid rgba(255,255,255,.05)}.les:last-of-type{border-bottom:none}
+.ln{font-family:var(--fm);font-size:.7rem;color:var(--o);letter-spacing:3px;text-transform:uppercase;margin-bottom:.5rem}
+.les h2{font-family:var(--fd);font-weight:900;font-size:clamp(1.8rem,3vw,2.5rem);letter-spacing:-1px;margin-bottom:1.5rem;line-height:1.1}
+.les p{color:var(--t2);font-size:1.05rem;margin-bottom:1.3rem;line-height:1.8}.les p strong{color:var(--t1)}
+.ib{background:var(--sf);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:1.5rem 2rem;margin:1.5rem 0;position:relative;overflow:hidden}
+.ib::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.ib.ins::before{background:var(--o)}.ib.wrn::before{background:var(--rd)}.ib.tip::before{background:var(--gn)}.ib.ex::before{background:var(--bl)}
+.ibl{font-family:var(--fm);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem}
+.ib.ins .ibl{color:var(--o)}.ib.wrn .ibl{color:var(--rd)}.ib.tip .ibl{color:var(--gn)}.ib.ex .ibl{color:var(--bl)}
+.ib p{font-size:.95rem;margin-bottom:0;color:var(--t2);line-height:1.7}
+.cb{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.5rem;background:transparent;border:1px solid rgba(0,214,143,.3);border-radius:8px;color:var(--gn);font-family:var(--fb);font-weight:600;font-size:.85rem;cursor:pointer;transition:all .3s;margin-top:1.5rem}
+.cb:hover{background:rgba(0,214,143,.08);border-color:var(--gn)}.cb.done{background:rgba(0,214,143,.1);border-color:var(--gn);pointer-events:none}
+
+/* CODE BLOCK */
+.code{background:var(--sl);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.8rem;color:var(--gn);line-height:1.8;overflow-x:auto;white-space:pre}
+.code .cm{color:var(--tm)}.code .kw{color:var(--o)}.code .st{color:var(--bl)}
+
+/* TABLE */
+.ctb{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem}
+.ctb th{font-family:var(--fd);font-weight:700;text-align:left;padding:.8rem 1.2rem;background:var(--sf);border-bottom:2px solid var(--o);font-size:.85rem}
+.ctb td{padding:.8rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t2)}.ctb tr:hover td{background:rgba(247,147,26,.03)}
+.ctb .fc{color:var(--t1);font-weight:500}
+
+/* DIAGRAM */
+.dia{background:var(--sf);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:2rem;margin:2rem 0;text-align:center}
+.dit{font-family:var(--fd);font-weight:700;font-size:1rem;margin-bottom:1.5rem;color:var(--t1)}
+.fs{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.fst{background:var(--sl);border:1px solid rgba(247,147,26,.15);border-radius:10px;padding:.8rem 1.2rem;font-size:.8rem;color:var(--t1);text-align:center;min-width:110px;transition:all .3s}
+.fst:hover{border-color:var(--o);transform:translateY(-2px)}
+.fst .se{font-size:1.5rem;display:block;margin-bottom:.3rem}
+.fa{color:var(--o);font-size:1.2rem;font-weight:700}
+
+/* QUIZ */
+.qs{margin-top:3rem;padding-top:3rem;border-top:2px solid var(--o)}
+.qh{text-align:center;margin-bottom:3rem}.qh h2{font-family:var(--fd);font-weight:900;font-size:clamp(2rem,3.5vw,3rem);letter-spacing:-1px;margin-bottom:.5rem}
+.qh h2 em{font-style:normal;background:linear-gradient(135deg,var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.qh p{color:var(--t2);font-size:1rem}
+.qpr{text-align:center;font-family:var(--fm);font-size:.8rem;color:var(--tm);margin-bottom:2rem}
+.qpb{width:100%;max-width:400px;height:4px;background:var(--sl);border-radius:2px;margin:.5rem auto 0;overflow:hidden}
+.qpf{height:100%;background:linear-gradient(90deg,var(--o),var(--g));border-radius:2px;transition:width .5s}
+.qqc{background:var(--sf);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:2.5rem;max-width:700px;margin:0 auto 2rem}
+.qqn{font-family:var(--fm);font-size:.7rem;color:var(--o);letter-spacing:2px;text-transform:uppercase;margin-bottom:.8rem}
+.qqt{font-family:var(--fd);font-weight:700;font-size:1.3rem;margin-bottom:1.5rem;line-height:1.4}
+.qos{display:flex;flex-direction:column;gap:.8rem}
+.qo{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--sl);border:1px solid rgba(255,255,255,.06);border-radius:12px;cursor:pointer;transition:all .3s;font-size:.95rem;color:var(--t2)}
+.qo:hover{border-color:rgba(247,147,26,.3);color:var(--t1);background:var(--sh)}
+.qo.sel{border-color:var(--o);background:rgba(247,147,26,.08);color:var(--t1)}
+.qo.cor{border-color:var(--gn);background:rgba(0,214,143,.08);color:var(--gn)}
+.qo.inc{border-color:var(--rd);background:rgba(255,77,106,.08);color:var(--rd)}
+.ol{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.75rem;font-weight:600;flex-shrink:0;transition:all .3s}
+.qo.sel .ol{background:var(--o);border-color:var(--o);color:var(--dk)}
+.qo.cor .ol{background:var(--gn);border-color:var(--gn);color:var(--dk)}
+.qo.inc .ol{background:var(--rd);border-color:var(--rd);color:var(--dk)}
+.qfb{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:10px;font-size:.9rem;line-height:1.6;display:none}
+.qfb.sh{display:block}.qfb.cfb{background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);color:var(--gn)}.qfb.ifb{background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.2);color:var(--rd)}
+.qnv{display:flex;justify-content:center;gap:1rem;margin-top:1.5rem}
+.qb{padding:.8rem 2rem;border-radius:10px;font-family:var(--fb);font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;border:none}
+.qbp{background:var(--o);color:var(--dk)}.qbp:hover{box-shadow:0 0 30px rgba(247,147,26,.3);transform:translateY(-2px)}.qbp:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.qbg{background:transparent;color:var(--t2);border:1px solid rgba(255,255,255,.1)}.qbg:hover{border-color:var(--o);color:var(--o)}
+
+/* RESULTS */
+.qr{text-align:center;padding:3rem;display:none}.qr.sh{display:block}
+.qsr{width:160px;height:160px;border-radius:50%;margin:0 auto 2rem;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative}
+.qsr::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid var(--sl)}
+.qsr.pass::before{border-color:var(--gn);box-shadow:0 0 40px rgba(0,214,143,.2)}
+.qsr.fail::before{border-color:var(--rd);box-shadow:0 0 40px rgba(255,77,106,.2)}
+.qsp{font-family:var(--fd);font-weight:900;font-size:3rem;line-height:1}
+.qsr.pass .qsp{color:var(--gn)}.qsr.fail .qsp{color:var(--rd)}
+.qsl{font-family:var(--fm);font-size:.7rem;color:var(--tm);letter-spacing:2px;text-transform:uppercase;margin-top:.3rem}
+.qrt{font-family:var(--fd);font-weight:900;font-size:2rem;margin-bottom:.5rem}
+.qrd{color:var(--t2);font-size:1rem;max-width:500px;margin:0 auto 2rem;line-height:1.7}
+.qrb{display:flex;justify-content:center;gap:2rem;margin-bottom:2rem}
+.qrbi{text-align:center}.qrbn{font-family:var(--fd);font-weight:900;font-size:1.8rem}
+.qrbl{font-size:.75rem;color:var(--tm);font-family:var(--fm);letter-spacing:1px;text-transform:uppercase}
+
+/* CERT */
+.certc{display:none;margin:2rem auto;max-width:650px}.certc.sh{display:block}
+.cert{background:linear-gradient(145deg,#1a1712,#0f0d0a);border:2px solid var(--o);border-radius:20px;padding:3rem 2.5rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(247,147,26,.15),inset 0 0 60px rgba(247,147,26,.03)}
+.cert::before{content:'';position:absolute;inset:8px;border:1px solid rgba(247,147,26,.2);border-radius:14px;pointer-events:none}
+.certb{width:80px;height:80px;margin:0 auto 1.2rem;background:rgba(247,147,26,.1);border:2px solid var(--o);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;position:relative;z-index:1;box-shadow:0 0 30px rgba(247,147,26,.2)}
+.certp{font-family:var(--fm);font-size:.7rem;color:var(--tm);letter-spacing:3px;text-transform:uppercase;margin-bottom:.3rem;position:relative;z-index:1}
+.certt{font-family:var(--fd);font-weight:900;font-size:1.6rem;margin-bottom:.3rem;position:relative;z-index:1;background:linear-gradient(135deg,var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.certco{font-family:var(--fd);font-weight:700;font-size:1.1rem;color:var(--t1);margin-bottom:1.2rem;position:relative;z-index:1}
+.certn{font-family:var(--fd);font-weight:700;font-size:1.4rem;color:var(--t1);border-bottom:1px solid rgba(247,147,26,.3);padding-bottom:.5rem;margin-bottom:.5rem;display:inline-block;min-width:200px;position:relative;z-index:1}
+.certni{background:transparent;border:none;border-bottom:1px solid rgba(247,147,26,.3);color:var(--t1);font-family:var(--fd);font-weight:700;font-size:1.4rem;text-align:center;padding:.3rem .5rem;min-width:200px;outline:none;position:relative;z-index:1}
+.certni::placeholder{color:var(--tm);font-weight:400;font-size:1rem}.certni:focus{border-bottom-color:var(--o)}
+.certa{display:flex;justify-content:center;gap:1rem;margin-top:1.5rem}
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;background:#1a1712 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border:3px solid #F7931A !important;box-shadow:none !important}.certa,.qb,.qnv,nav,.side,.pbar,.pw{display:none !important}}
+.certd,.certs,.certi{font-family:var(--fm);font-size:.75rem;position:relative;z-index:1}
+.certd{color:var(--tm);margin-top:.8rem}.certs{color:var(--gn);margin-top:.3rem}.certi{color:var(--tm);margin-top:1rem;opacity:.5;font-size:.6rem}
+
+@media(max-width:900px){.side{display:none}.main{margin-left:0;padding:2rem 1.5rem 4rem;max-width:100%}.fs{flex-direction:column}.fa{transform:rotate(90deg)}}
+.rev{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}.rev.vis{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- PAYWALL -->
+<div class="pw" id="pw">
+  <div class="pwc">
+    <div class="pwi">🏗️</div>
+    <h2>Unlock <em>Bitcoin Mastery</em></h2>
+    <p class="pws">8 advanced modules covering cryptography, protocol scripting, node operation, monetary theory, and building on Bitcoin.</p>
+    <ul class="pwf">
+      <li><span class="ck">✓</span> 8 deep-dive lesson modules</li>
+      <li><span class="ck">✓</span> Cryptography & script breakdowns</li>
+      <li><span class="ck">✓</span> 15-question mastery quiz</li>
+      <li><span class="ck">✓</span> Advanced Certificate on completion</li>
+      <li><span class="ck">✓</span> Lifetime access</li>
+    </ul>
+    <div class="pwpr">$39</div>
+    <p class="pwpn">One-time · Lifetime access · No subscription</p>
+    <div class="pwm">
+      <button class="pbtn pb1" onclick="unlock()">₿ Bitcoin</button>
+      <button class="pbtn pb2" onclick="unlock()">⚡ Lightning</button>
+      <button class="pbtn pb3" onclick="unlock()">💳 Card</button>
+    </div>
+    <p class="pwg">🔒 30-day money-back guarantee</p>
+    <button class="pwsk" onclick="unlock()">Preview free (demo)</button>
+  </div>
+</div>
+
+<nav>
+  <a href="bitcoin-education.html" class="logo"><div class="logo-icon">₿</div>Bitcoin <span style="color:var(--t1)">Academy</span></a>
+  <a href="bitcoin-education.html" class="nb">← Home</a>
+</nav>
+<div class="pbar"><div class="pfill" id="pbar"></div></div>
+
+<div class="cl">
+  <aside class="side">
+    <div class="sh">
+      <span class="slv">● Advanced</span>
+      <div class="stt">Bitcoin Mastery</div>
+      <div class="spr"><span id="cc">0</span> / 8 Complete<div class="spb"><div class="spf" id="spf"></div></div></div>
+    </div>
+    <ul class="sn">
+      <li><a href="#l1" class="ac" data-l="1"><span class="nm">01</span> Elliptic Curves</a></li>
+      <li><a href="#l2" data-l="2"><span class="nm">02</span> Bitcoin Script</a></li>
+      <li><a href="#l3" data-l="3"><span class="nm">03</span> Running a Node</a></li>
+      <li><a href="#l4" data-l="4"><span class="nm">04</span> MultiSig & Timelocks</a></li>
+      <li><a href="#l5" data-l="5"><span class="nm">05</span> Taproot & Schnorr</a></li>
+      <li><a href="#l6" data-l="6"><span class="nm">06</span> Austrian Economics</a></li>
+      <li><a href="#l7" data-l="7"><span class="nm">07</span> Game Theory</a></li>
+      <li><a href="#l8" data-l="8"><span class="nm">08</span> Building on Bitcoin</a></li>
+      <li class="sql"><a href="#quiz" data-l="q"><span class="nm">🎓</span> Mastery Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+
+    <div class="les rev" id="l1">
+      <div class="ln">Module 01</div>
+      <h2>Elliptic Curve Cryptography</h2>
+      <p>At the heart of every Bitcoin transaction is <strong>elliptic curve cryptography (ECC)</strong>. Bitcoin uses a specific curve called <strong>secp256k1</strong>, defined by the equation y² = x³ + 7 over a finite field. This mathematical structure makes it easy to compute a public key from a private key, but computationally infeasible to reverse the process.</p>
+      <p>Your <strong>private key</strong> is simply a random 256-bit number — one of roughly 10⁷⁷ possible values (more than the number of atoms in the observable universe). Your <strong>public key</strong> is derived by multiplying the private key by the curve's generator point G using elliptic curve point multiplication.</p>
+      <div class="ib ins"><div class="ibl">💡 The Trapdoor Function</div><p>ECC is a "trapdoor function" — easy in one direction, virtually impossible in reverse. Given private key <em>k</em>, computing public key <em>K = k × G</em> takes microseconds. But given K and G, finding k would take longer than the age of the universe with current computing. This asymmetry is the foundation of all Bitcoin security.</p></div>
+      <p><strong>From public key to address:</strong> Bitcoin doesn't directly use the raw public key as an address. Instead, it applies SHA-256 hashing followed by RIPEMD-160 (collectively called Hash160), then adds a version byte and checksum to create a Base58Check-encoded address. This additional hashing provides a second layer of protection — even if ECC were somehow broken, your funds would still be protected by the hash functions.</p>
+      <div class="ib ex"><div class="ibl">📌 Quantum Resistance</div><p>Shor's algorithm running on a sufficiently powerful quantum computer could theoretically break ECC. However, Bitcoin addresses that have never spent (only received) are protected by the hash layer — an attacker would need to break both ECC and SHA-256. The Bitcoin community is actively researching post-quantum signature schemes for future soft-fork integration.</p></div>
+      <button class="cb" onclick="comp(1)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l2">
+      <div class="ln">Module 02</div>
+      <h2>Bitcoin Script & Transaction Types</h2>
+      <p>Bitcoin transactions aren't just "send X to Y." They're programmable using <strong>Bitcoin Script</strong> — a stack-based, Forth-like language that defines the conditions under which Bitcoin can be spent. Every UTXO is locked with a script (scriptPubKey), and spending it requires providing a matching script (scriptSig).</p>
+      <p><strong>Script is intentionally limited:</strong> it's not Turing-complete (no loops), which prevents infinite execution and makes transaction validation predictable and safe. This is a deliberate design choice — security over flexibility.</p>
+      <table class="ctb">
+        <thead><tr><th>Transaction Type</th><th>Script</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td class="fc">P2PKH</td><td>Pay-to-Public-Key-Hash</td><td>Classic Bitcoin addresses (1...)</td></tr>
+          <tr><td class="fc">P2SH</td><td>Pay-to-Script-Hash</td><td>MultiSig, complex conditions (3...)</td></tr>
+          <tr><td class="fc">P2WPKH</td><td>Pay-to-Witness-PKH (SegWit)</td><td>Native SegWit (bc1q...)</td></tr>
+          <tr><td class="fc">P2WSH</td><td>Pay-to-Witness-Script-Hash</td><td>SegWit script hashes</td></tr>
+          <tr><td class="fc">P2TR</td><td>Pay-to-Taproot</td><td>Taproot addresses (bc1p...)</td></tr>
+        </tbody>
+      </table>
+      <div class="ib ins"><div class="ibl">💡 How Script Executes</div><p>When you spend Bitcoin, the network combines your scriptSig (the "key") with the UTXO's scriptPubKey (the "lock") and executes them on a stack machine. If the final result is TRUE, the spend is valid. For a simple P2PKH transaction, this means: push your signature, push your public key, duplicate it, hash it, compare to the stored hash, verify the signature. Six opcodes, bulletproof security.</p></div>
+      <button class="cb" onclick="comp(2)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l3">
+      <div class="ln">Module 03</div>
+      <h2>Running & Configuring a Full Node</h2>
+      <p>A full node is the ultimate expression of Bitcoin sovereignty. When you run a full node, you independently validate every transaction and every block against the consensus rules — you trust no one. You become an equal peer in the Bitcoin network.</p>
+      <p><strong>What a full node does:</strong> it downloads and verifies the entire blockchain (~600GB as of 2026), validates every transaction against the consensus rules, relays valid transactions and blocks to other nodes, and rejects anything that violates the rules — regardless of who sent it or how much hash power supports it.</p>
+      <div class="ib tip"><div class="ibl">✅ Hardware Requirements</div><p><strong>Minimum:</strong> Any modern computer with 2GB RAM, 1TB storage (SSD recommended), and a stable internet connection. A Raspberry Pi 4 with an external SSD is a popular low-cost option (~$150 total). <strong>Software:</strong> Bitcoin Core is the reference implementation. Download from bitcoincore.org, verify the PGP signatures, and let it sync (initial sync takes 1-3 days depending on hardware and bandwidth).</p></div>
+      <p><strong>Why it matters for the network:</strong> Every full node is a vote for the consensus rules. During the 2017 block size wars, it was the full nodes — not the miners — that ultimately decided which chain was "Bitcoin." Miners proposed SegWit2x (larger blocks), but the economic majority of nodes rejected it. The chain with the most hash power lost to the chain with the most nodes. This was proof that Bitcoin's governance is decentralised.</p>
+      <div class="ib ins"><div class="ibl">💡 Pruned vs Archival</div><p>If storage is a concern, you can run a "pruned" node that only keeps the most recent blocks (as little as 5GB) while still fully validating everything. You lose the ability to serve historical blocks to other nodes, but you gain the same security guarantees as an archival node. There's no excuse not to run one.</p></div>
+      <button class="cb" onclick="comp(3)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l4">
+      <div class="ln">Module 04</div>
+      <h2>Multi-Sig & Timelock Contracts</h2>
+      <p>Bitcoin Script enables programmable money far beyond simple transfers. Two of the most powerful primitives are <strong>multi-signature (multisig)</strong> transactions and <strong>timelocks</strong> — and combining them unlocks sophisticated financial arrangements without intermediaries.</p>
+      <p><strong>Multisig</strong> requires M-of-N signatures to spend. A 2-of-3 multisig means three keys exist, and any two must sign to authorise a transaction. This eliminates single points of failure — no single lost or stolen key can compromise your funds.</p>
+      <div class="dia"><div class="dit">2-of-3 MultiSig Architecture</div>
+        <div class="fs">
+          <div class="fst"><span class="se">🔑</span>Key 1<br><small style="color:var(--tm)">Hardware wallet<br>(your home)</small></div>
+          <div class="fst"><span class="se">🔑</span>Key 2<br><small style="color:var(--tm)">Hardware wallet<br>(bank vault)</small></div>
+          <div class="fst"><span class="se">🔑</span>Key 3<br><small style="color:var(--tm)">Backup on steel<br>(separate location)</small></div>
+        </div>
+        <p style="color:var(--tm);font-size:.8rem;margin-top:1rem">Any 2 of these 3 keys can authorise a spend. Lose one? You still have access. One stolen? Attacker can't spend.</p>
+      </div>
+      <p><strong>Timelocks</strong> add a time dimension to Bitcoin Script. <strong>CLTV (CheckLockTimeVerify)</strong> prevents a UTXO from being spent before a specific block height or timestamp. <strong>CSV (CheckSequenceVerify)</strong> enforces a relative delay from when the UTXO was created. Together, these enable inheritance planning (coins unlock after X years of inactivity), escrow arrangements, payment channels (the foundation of Lightning), and vesting schedules for organisational treasuries.</p>
+      <div class="ib ins"><div class="ibl">💡 Real-World Application</div><p>Consider a Bitcoin inheritance plan: you create a 2-of-3 multisig where Key 1 is yours, Key 2 is your heir's, and Key 3 is a time-locked recovery key that activates after 1 year of inactivity. Normally, only you can spend (Key 1 + Key 2 with your cooperation). But if something happens to you, after one year your heir can use Key 2 + the now-unlocked Key 3. No lawyers, no probate, no trust required.</p></div>
+      <button class="cb" onclick="comp(4)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l5">
+      <div class="ln">Module 05</div>
+      <h2>Taproot, Schnorr & Future Upgrades</h2>
+      <p>The <strong>Taproot upgrade</strong> (activated November 2021) was Bitcoin's most significant protocol change since SegWit. It introduced Schnorr signatures, Merkelized Alternative Script Trees (MAST), and a new address format (P2TR / bc1p...) — collectively enhancing privacy, efficiency, and smart contract capability.</p>
+      <p><strong>Schnorr signatures</strong> replace ECDSA for Taproot transactions. They're mathematically simpler, provably secure, and critically support <strong>key aggregation</strong>: multiple public keys can be combined into a single key, and multiple signatures into a single signature. A 10-of-10 multisig becomes indistinguishable from a single-key spend on-chain — same size, same cost, complete privacy.</p>
+      <p><strong>MAST (Merkelized Alternative Script Trees)</strong> allows complex spending conditions to be organised in a Merkle tree. Only the branch actually used is revealed on-chain. If you have a contract with 10 possible spending conditions, the blockchain only ever sees the one that was executed — the other 9 remain hidden. This dramatically improves both privacy and efficiency for complex scripts.</p>
+      <div class="ib ins"><div class="ibl">💡 Key/Script Path Duality</div><p>Every Taproot output has two spending paths: a <strong>key path</strong> (simple Schnorr signature, looks like any normal transaction) and a <strong>script path</strong> (reveals a MAST branch for complex conditions). In the cooperative case, parties use the key path — fast, cheap, and private. The script path is the fallback — used only if cooperation fails. This "optimistic execution" model means the common case is always the most efficient.</p></div>
+      <p><strong>Future upgrades being researched:</strong> OP_CTV (covenant-style restrictions on how coins can be spent), cross-input signature aggregation (further reducing transaction sizes), and SIGHASH_ANYPREVOUT (enabling Eltoo, a next-generation Lightning channel design). Bitcoin development is slow and deliberate by design — each change undergoes years of peer review.</p>
+      <button class="cb" onclick="comp(5)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l6">
+      <div class="ln">Module 06</div>
+      <h2>Austrian Economics & Bitcoin</h2>
+      <p>Bitcoin didn't emerge from a vacuum. Its design philosophy is deeply rooted in <strong>Austrian economics</strong> — a school of economic thought that emphasises individual action, subjective value, sound money, and skepticism of central planning. Understanding this intellectual foundation explains <em>why</em> Bitcoin works the way it does.</p>
+      <p><strong>Sound money theory</strong> argues that money should be difficult to produce (scarcity), resistant to debasement (hard cap), and chosen freely by the market rather than imposed by decree. Gold served this role for millennia. Fiat currency abandoned these principles entirely. Bitcoin re-implements them digitally.</p>
+      <p><strong>The Cantillon Effect:</strong> When new money is created (printed), those closest to the source (governments, banks, large institutions) benefit first by spending it before prices adjust. By the time new money reaches ordinary people, prices have already risen. This systematic wealth transfer from savers to those closest to the money printer is invisible but devastating over decades. Bitcoin's fixed supply eliminates this entirely.</p>
+      <div class="ib ins"><div class="ibl">💡 Time Preference</div><p>Austrian economics emphasises <strong>time preference</strong> — the degree to which people value present consumption over future consumption. Sound money (which holds or increases in value) encourages low time preference: saving, investing, thinking long-term. Inflationary money encourages high time preference: spending now because your money loses value tomorrow. Bitcoin, as a deflationary asset, structurally incentivises low time preference — arguably one of its most profound societal effects.</p></div>
+      <p><strong>Hayek's denationalisation of money:</strong> In 1976, economist Friedrich Hayek proposed allowing private currencies to compete with government money, arguing competition would produce superior monetary systems. Bitcoin is the most successful implementation of this idea — a non-state money competing purely on its merits in a global market.</p>
+      <button class="cb" onclick="comp(6)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l7">
+      <div class="ln">Module 07</div>
+      <h2>Game Theory of Decentralised Systems</h2>
+      <p>Bitcoin doesn't rely on anyone being honest — it creates conditions where acting honestly is the most profitable strategy. This is <strong>mechanism design</strong>: engineering the rules of a game so that self-interested behaviour produces a desired collective outcome.</p>
+      <p><strong>Miner incentives:</strong> Miners spend enormous amounts on hardware and electricity. Their only way to recoup costs is by finding valid blocks. An invalid block is rejected by nodes and earns nothing — wasting all that energy. Therefore, rational miners always produce valid blocks. The more they invest, the more they have to lose by cheating. This is Nakamoto Consensus: security through economic incentive.</p>
+      <p><strong>The 51% attack paradox:</strong> An entity controlling >50% of hash power could theoretically double-spend. But doing so would instantly devalue Bitcoin, destroying the value of the attacker's own massive hardware investment and mining rewards. The cost of attack rises with Bitcoin's value, while the incentive to attack falls. It's a self-reinforcing security model.</p>
+      <div class="ib ins"><div class="ibl">💡 Schelling Points</div><p>Bitcoin's 21 million supply cap is a <strong>Schelling point</strong> — a focal point that participants converge on without explicit coordination. Everyone expects it, so everyone enforces it. Changing it would require convincing the majority to abandon the very property that gives Bitcoin value. This social consensus is arguably stronger than any cryptographic guarantee — it's a Nash Equilibrium where no individual benefits from deviating.</p></div>
+      <p><strong>Node game theory:</strong> Full nodes enforce rules for free (no block reward). Why do they run? Because node operators are typically Bitcoin holders whose wealth depends on the network's integrity. Running a node is rational self-interest disguised as altruism — you verify to protect your own assets. This aligns incentives without explicit rewards.</p>
+      <div class="ib ex"><div class="ibl">📌 The Byzantines Finally Agree</div><p>The Byzantine Generals Problem — how can distributed participants reach consensus when some may be dishonest? — was considered unsolvable for decades. Bitcoin's Proof of Work provides a practical solution: generals (miners) prove their commitment by expending real resources (energy), making dishonesty prohibitively expensive. Satoshi didn't just create a currency — he solved a 40-year-old computer science problem.</p></div>
+      <button class="cb" onclick="comp(7)">✓ Mark as Complete</button>
+    </div>
+
+    <div class="les rev" id="l8">
+      <div class="ln">Module 08</div>
+      <h2>Building on Bitcoin: Developer Introduction</h2>
+      <p>You don't need to be a protocol developer to build on Bitcoin. A growing ecosystem of tools, libraries, and APIs makes it increasingly accessible to create applications that leverage Bitcoin's infrastructure.</p>
+      <p><strong>Bitcoin Core RPC:</strong> The reference client exposes a JSON-RPC interface that lets you query blockchain data, create transactions, manage wallets, and interact with the network programmatically. This is the lowest-level interface — powerful but complex.</p>
+      <p><strong>Development libraries by language:</strong></p>
+      <table class="ctb">
+        <thead><tr><th>Language</th><th>Library</th><th>Best For</th></tr></thead>
+        <tbody>
+          <tr><td class="fc">Python</td><td>python-bitcoinlib, bdk-python</td><td>Scripting, prototyping, data analysis</td></tr>
+          <tr><td class="fc">JavaScript</td><td>bitcoinjs-lib, bdk-wasm</td><td>Web apps, browser wallets</td></tr>
+          <tr><td class="fc">Rust</td><td>rust-bitcoin, BDK</td><td>Performance-critical apps, wallets</td></tr>
+          <tr><td class="fc">Go</td><td>btcd, btcutil</td><td>Infrastructure, node implementations</td></tr>
+        </tbody>
+      </table>
+      <p><strong>The Lightning Development Kit (LDK)</strong> lets you embed Lightning Network functionality into any application. Rather than running a full Lightning node, LDK provides modular components you can integrate into mobile apps, web services, or IoT devices.</p>
+      <div class="ib tip"><div class="ibl">✅ Where to Start</div><p><strong>Beginner:</strong> Start with Mempool.space's API — query blocks, transactions, and fee data via simple HTTP. Build a transaction explorer or fee estimator. <strong>Intermediate:</strong> Use bitcoinjs-lib or python-bitcoinlib to construct and sign transactions programmatically. <strong>Advanced:</strong> Set up Bitcoin Core in regtest mode (local test network), create custom scripts, and experiment with Taproot outputs. The Learning Bitcoin from the Command Line guide by BlockchainCommons is excellent.</p></div>
+      <div class="ib ins"><div class="ibl">💡 The Builder's Mindset</div><p>Bitcoin is open-source, permissionless infrastructure. Anyone can build on it without asking permission. The most impactful Bitcoin companies — exchanges, wallet providers, Lightning services, mining operations — were all started by people who learned the protocol and saw opportunities. Understanding Bitcoin at the level you've reached in this course puts you in a small percentage of the global population. The question isn't whether you <em>can</em> build — it's what you'll choose to build.</p></div>
+      <button class="cb" onclick="comp(8)">✓ Mark as Complete</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="qs" id="quiz">
+      <div class="qh"><h2>Mastery <em>Quiz</em></h2><p>15 questions. Score 70% to earn your Advanced Certificate.</p></div>
+      <div class="qpr" id="qpr">Question <span id="cq">1</span> of <span id="tq">15</span><div class="qpb"><div class="qpf" id="qpf"></div></div></div>
+      <div id="qcon"></div>
+      <div class="qr" id="qres">
+        <div class="qsr" id="qsr"><div class="qsp" id="qspt"></div><div class="qsl">Score</div></div>
+        <h2 class="qrt" id="qrt"></h2><p class="qrd" id="qrd"></p>
+        <div class="qrb"><div class="qrbi"><div class="qrbn up" id="qcc"></div><div class="qrbl">Correct</div></div><div class="qrbi"><div class="qrbn dn" id="qic"></div><div class="qrbl">Incorrect</div></div></div>
+        <div class="qnv"><button class="qb qbg" onclick="retake()">Retake</button><a href="bitcoin-education.html" class="qb qbp" style="text-decoration:none">Back to Academy</a></div>
+        <div class="certc" id="certc">
+          <div class="cert">
+            <div class="certb">🏗️</div>
+            <div class="certp">Certificate of Completion</div>
+            <div class="certt">Bitcoin Academy</div>
+            <div class="certco">Bitcoin Mastery — Advanced</div>
+            <input type="text" class="certni" id="certn" placeholder="Enter your name here">
+            <div class="certd" id="certd"></div>
+            <div class="certs" id="certs"></div>
+            <div class="certi" id="certi"></div>
+          </div>
+          <div class="certa">
+            <button class="qb qbg" onclick="printCert()">🖨️ Print Certificate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function unlock(){document.getElementById('pw').classList.add('h')}
+
+// LESSON COMPLETION
+var done=new Set();
+function comp(n){
+  done.add(n);event.target.textContent='✓ Completed';event.target.classList.add('done');
+  var lk=document.querySelector('.sn a[data-l="'+n+'"]');if(lk)lk.classList.add('dn');
+  document.getElementById('cc').textContent=done.size;
+  document.getElementById('spf').style.width=(done.size/8*100)+'%';
+}
+
+// SIDEBAR ACTIVE
+var sects=document.querySelectorAll('.les,.qs');
+var slinks=document.querySelectorAll('.sn a');
+var sobs=new IntersectionObserver(function(entries){entries.forEach(function(e){
+  if(e.isIntersecting){var id=e.target.id;slinks.forEach(function(l){l.classList.remove('ac')});
+  var al=document.querySelector('.sn a[href="#'+id+'"]');if(al)al.classList.add('ac')}
+})},{threshold:.2,rootMargin:'-100px 0px -50% 0px'});
+sects.forEach(function(s){sobs.observe(s)});
+
+// SCROLL PROGRESS
+window.addEventListener('scroll',function(){
+  var p=Math.min(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100,100);
+  document.getElementById('pbar').style.width=p+'%';
+});
+
+// REVEAL
+var revs=document.querySelectorAll('.rev');
+var robs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');robs.unobserve(e.target)}})},{threshold:.1});
+revs.forEach(function(el){robs.observe(el)});
+
+// QUIZ
+var Q=[
+  {q:"What elliptic curve does Bitcoin use?",o:["P-256 (secp256r1)","secp256k1","Curve25519","Ed448"],c:1,e:"Bitcoin uses secp256k1, defined by y² = x³ + 7. It was chosen partly because its parameters were generated transparently, reducing concern about potential backdoors."},
+  {q:"Why is ECC called a 'trapdoor function'?",o:["It traps attackers in a loop","It's easy to compute in one direction but infeasible to reverse","It only works underground","It requires a physical key"],c:1,e:"Computing a public key from a private key is trivial, but deriving the private key from the public key would take longer than the age of the universe with current computing."},
+  {q:"What programming paradigm does Bitcoin Script use?",o:["Object-oriented","Functional with recursion","Stack-based, Forth-like, intentionally not Turing-complete","Event-driven"],c:2,e:"Bitcoin Script is stack-based and deliberately lacks loops (not Turing-complete), ensuring predictable execution and preventing denial-of-service attacks."},
+  {q:"What is the primary advantage of running a full node?",o:["You earn Bitcoin rewards","You can mine more efficiently","You independently validate all transactions and blocks, trusting no one","You get faster internet"],c:2,e:"Full nodes verify everything against consensus rules independently. This is the ultimate form of Bitcoin sovereignty — you don't trust, you verify."},
+  {q:"In a 2-of-3 multisig setup, what happens if one key is lost?",o:["All funds are lost forever","You can still spend using the remaining two keys","The network recovers the key automatically","You must contact Bitcoin support"],c:1,e:"That's the beauty of 2-of-3: you need any 2 of the 3 keys. Losing one key doesn't lock you out, and a single stolen key can't be used alone."},
+  {q:"What does CLTV (CheckLockTimeVerify) do?",o:["Checks the lock on your wallet","Prevents a UTXO from being spent before a specific block height or time","Verifies your password","Locks the transaction fee"],c:1,e:"CLTV is an absolute timelock — it makes a UTXO unspendable until a specified block height or Unix timestamp has been reached."},
+  {q:"What key innovation does Schnorr signatures bring to Bitcoin via Taproot?",o:["Faster block times","Key aggregation — multiple keys combine into one, making multisig indistinguishable from single-key spends","Unlimited block sizes","Automatic price stabilisation"],c:1,e:"Schnorr's key aggregation means a 10-of-10 multisig looks identical to a normal single-signature transaction on-chain — same size, same cost, total privacy."},
+  {q:"What is MAST in the context of Taproot?",o:["A type of mining hardware","Merkelized Alternative Script Trees — complex spending conditions organised in a Merkle tree where only the used branch is revealed","A Lightning Network routing protocol","A type of Bitcoin wallet"],c:1,e:"MAST organises multiple script paths in a Merkle tree. Only the path actually used is ever revealed on-chain, hiding the unused conditions and improving privacy."},
+  {q:"What is the Cantillon Effect?",o:["A mining difficulty algorithm","The phenomenon where those closest to newly created money benefit first, before prices adjust","A type of cryptographic hash","A Lightning Network routing fee"],c:1,e:"The Cantillon Effect describes how money creation disproportionately benefits those who receive it first (banks, institutions) at the expense of those who receive it last (ordinary people)."},
+  {q:"What does 'low time preference' mean in Austrian economics?",o:["Preferring to spend money quickly","Wanting faster transaction times","Valuing future consumption over present consumption — saving and investing long-term","Checking the time frequently"],c:2,e:"Low time preference means prioritising the future over immediate gratification. Sound money like Bitcoin encourages this by preserving (or increasing) purchasing power over time."},
+  {q:"Why don't rational miners produce invalid blocks?",o:["They're too expensive to create","Invalid blocks are rejected by nodes and earn nothing — wasting the miner's energy and hardware investment","It's physically impossible","They would be arrested"],c:1,e:"Mining is expensive. An invalid block is rejected by the network, meaning all the energy spent finding it was wasted. Rational miners always produce valid blocks because honesty is more profitable."},
+  {q:"What is a Schelling point in the context of Bitcoin's 21 million cap?",o:["A physical meeting place for Bitcoin users","A focal point that participants converge on without explicit coordination — everyone expects and enforces the cap","A type of mining pool","A Lightning Network node"],c:1,e:"The 21M cap is a Schelling point: everyone expects it, so everyone enforces it. Deviating would destroy the property that gives Bitcoin value, so no rational participant benefits from trying."},
+  {q:"What did the 2017 SegWit2x debate prove about Bitcoin's governance?",o:["Miners control Bitcoin","Developers control Bitcoin","Full nodes (the economic majority) ultimately decide the consensus rules, not miners","The government controls Bitcoin"],c:2,e:"Miners proposed larger blocks, but the majority of full nodes rejected SegWit2x. The chain with the most nodes won over the chain with the most hash power — proving decentralised governance."},
+  {q:"What is Bitcoin Core's 'regtest' mode used for?",o:["Testing regulations","A local test network where you can create blocks instantly for development and experimentation","Registering your Bitcoin","Resetting your wallet"],c:1,e:"Regtest (regression test) mode creates a private blockchain on your machine where you can mine blocks instantly, making it perfect for testing transactions, scripts, and applications."},
+  {q:"What is the key-path / script-path duality in Taproot?",o:["Two different cryptocurrencies","Every Taproot output can be spent via a simple signature (key path) or by revealing a script condition (script path), enabling optimistic execution","A hardware wallet feature","Two types of mining"],c:1,e:"Taproot's duality means the common cooperative case uses the efficient key path, while the script path is a fallback for disputes. This makes the most common transactions the cheapest and most private."}
+];
+
+var cq=0,sc=0,ans=false;
+function render(){
+  var q=Q[cq];var lt='ABCD';ans=false;
+  document.getElementById('cq').textContent=cq+1;
+  document.getElementById('qpf').style.width=(cq/Q.length*100)+'%';
+  document.getElementById('qcon').innerHTML='<div class="qqc"><div class="qqn">Question '+(cq+1)+' of '+Q.length+'</div><div class="qqt">'+q.q+'</div><div class="qos">'+
+    q.o.map(function(o,i){return'<div class="qo" onclick="pick('+i+')" id="qo'+i+'"><span class="ol">'+lt[i]+'</span><span>'+o+'</span></div>'}).join('')+
+    '</div><div class="qfb" id="qfb"></div><div class="qnv"><button class="qb qbp" id="nxb" onclick="nxt()" disabled>'+(cq===Q.length-1?'See Results':'Next Question →')+'</button></div></div>';
+}
+
+function pick(i){
+  if(ans)return;ans=true;var q=Q[cq];var ok=i===q.c;if(ok)sc++;
+  document.querySelectorAll('.qo').forEach(function(o,j){o.style.pointerEvents='none';if(j===q.c)o.classList.add('cor');else if(j===i&&!ok)o.classList.add('inc')});
+  var fb=document.getElementById('qfb');fb.classList.add('sh',ok?'cfb':'ifb');
+  fb.innerHTML='<strong>'+(ok?'✓ Correct!':'✗ Not quite.')+'</strong> '+q.e;
+  document.getElementById('nxb').disabled=false;
+}
+
+function nxt(){cq++;if(cq>=Q.length)results();else render()}
+
+function results(){
+  var pct=Math.round(sc/Q.length*100);var pass=pct>=70;
+  document.getElementById('qcon').style.display='none';
+  document.getElementById('qpr').style.display='none';
+  var r=document.getElementById('qres');r.classList.add('sh');
+  document.getElementById('qsr').classList.add(pass?'pass':'fail');
+  document.getElementById('qspt').textContent=pct+'%';
+  document.getElementById('qcc').textContent=sc;
+  document.getElementById('qic').textContent=Q.length-sc;
+  if(pass){
+    document.getElementById('qrt').textContent='🏗️ Mastery Achieved!';
+    document.getElementById('qrd').textContent='You scored '+sc+'/'+Q.length+' and completed the Bitcoin Mastery course. You now have a deep, protocol-level understanding of Bitcoin.';
+    var now=new Date();
+    document.getElementById('certd').textContent='Completed: '+now.toLocaleDateString('en-AU',{year:'numeric',month:'long',day:'numeric'});
+    document.getElementById('certs').textContent='Score: '+pct+'% ('+sc+'/'+Q.length+')';
+    document.getElementById('certi').textContent='Certificate ID: BTC-ADV-'+now.getFullYear()+'-'+Math.random().toString(36).substr(2,8).toUpperCase();
+    document.getElementById('certc').classList.add('sh');
+  }else{
+    document.getElementById('qrt').textContent='Almost There!';
+    document.getElementById('qrd').textContent='You scored '+sc+'/'+Q.length+'. You need 70% to pass. Review the lessons and try again!';
+  }
+}
+
+function retake(){
+  cq=0;sc=0;
+  document.getElementById('qcon').style.display='block';
+  document.getElementById('qpr').style.display='block';
+  document.getElementById('qres').classList.remove('sh');
+  document.getElementById('qsr').classList.remove('pass','fail');
+  document.getElementById('certc').classList.remove('sh');
+  render();
+}
+
+function printCert(){
+  var ni=document.getElementById('certn');
+  if(!ni.value.trim()){ni.focus();ni.style.borderBottomColor='#FF4D6A';setTimeout(function(){ni.style.borderBottomColor=''},2000);return}
+  window.print();
+}
+
+render();
+</script>
+</body>
+</html>
