@@ -150,7 +150,7 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
 .certni{background:transparent;border:none;border-bottom:1px solid rgba(247,147,26,.3);color:var(--t1);font-family:var(--fd);font-weight:700;font-size:1.4rem;text-align:center;padding:.3rem .5rem;min-width:200px;outline:none;position:relative;z-index:1}
 .certni::placeholder{color:var(--tm);font-weight:400;font-size:1rem}.certni:focus{border-bottom-color:var(--o)}
 .certa{display:flex;justify-content:center;gap:1rem;margin-top:1.5rem}
-@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;background:#1a1712 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border:3px solid #F7931A !important;box-shadow:none !important}.certa,.qb,.qnv,nav,.side,.pbar,.pw{display:none !important}}
+@media print{body{background:#fff !important}body::before{display:none !important}nav,.side,.pbar,.pw,.main .lesson,.main .quiz,.certa,.qb,.qnv,.cta{display:none !important}.certc{display:block !important}.cert{display:block !important;visibility:visible !important;position:relative !important;width:700px !important;margin:0 auto !important;padding:3rem !important;background:#1a1712 !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;border:3px solid #F7931A !important;border-radius:16px !important;box-shadow:none !important}.cert *{visibility:visible !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}.certb{font-size:2.5rem !important}.certp{color:#8A8697 !important}.certt{background:none !important;-webkit-text-fill-color:#F7931A !important;color:#F7931A !important}.certco{color:#F0EDE6 !important}.certni{border:none !important;color:#F7931A !important;background:transparent !important;font-size:1.5rem !important;text-align:center !important}.certd,.certi{color:#8A8697 !important}.certs{color:#00D68F !important}}
 .certd,.certs,.certi{font-family:var(--fm);font-size:.75rem;position:relative;z-index:1}
 .certd{color:var(--tm);margin-top:.8rem}.certs{color:var(--gn);margin-top:.3rem}.certi{color:var(--tm);margin-top:1rem;opacity:.5;font-size:.6rem}
 
@@ -173,15 +173,17 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
       <li><span class="ck">✓</span> Advanced Certificate on completion</li>
       <li><span class="ck">✓</span> Lifetime access</li>
     </ul>
-    <div class="pwpr">$39</div>
-    <p class="pwpn">One-time · Lifetime access · No subscription</p>
+    <div class="pwpr">$39 USD</div>
+    <p class="pwpn">One-time · Lifetime access · No subscription · All prices in USD</p>
     <div class="pwm">
-      <button class="pbtn pb1" onclick="unlock()">₿ Bitcoin</button>
-      <button class="pbtn pb2" onclick="unlock()">⚡ Lightning</button>
-      <button class="pbtn pb3" onclick="unlock()">💳 Card</button>
+      <button class="pbtn pb1" onclick="payWithBTCPay()">₿ Pay with Bitcoin</button>
+      <button class="pbtn pb2" onclick="payWithBTCPay()">⚡ Pay with Lightning</button>
+      <button class="pbtn pb3" disabled style="opacity:0.5;cursor:default;">💳 Card — Coming Soon</button>
+    </div>
+    <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:0.6rem;">
+      <button class="pbtn pb3" disabled style="opacity:0.5;cursor:default;">🅿️ PayPal — Coming Soon</button>
     </div>
     <p class="pwg">🔒 30-day money-back guarantee</p>
-    <button class="pwsk" onclick="unlock()">Preview free (demo)</button>
   </div>
 </div>
 
@@ -212,6 +214,15 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
   </aside>
 
   <main class="main">
+
+    <!-- PDF DOWNLOAD BANNER (only visible when unlocked) -->
+    <div class="pdf-download-banner" id="pdfBanner" style="display:none; background: linear-gradient(135deg, rgba(247,147,26,0.08), rgba(255,184,0,0.04)); border: 1px solid rgba(247,147,26,0.2); border-radius: 16px; padding: 1.2rem 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      <div>
+        <strong style="color: var(--o);">📄 Course PDF Companion</strong>
+        <p style="color: var(--t2); font-size: 0.85rem; margin-top: 0.3rem;">Download the complete Bitcoin Mastery course as a printable PDF.</p>
+      </div>
+      <a href="Course-Module-03-Bitcoin-Mastery.pdf" download class="pbtn pb1" style="text-decoration:none; font-size: 0.85rem; padding: 0.7rem 1.4rem;">⬇ Download PDF</a>
+    </div>
 
     <div class="les rev" id="l1">
       <div class="ln">Module 01</div>
@@ -359,6 +370,24 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
 
 <script>
 function unlock(){document.getElementById('pw').classList.add('h')}
+
+function payWithBTCPay(){
+  // BTCPay POS — Bitcoin Mastery Advanced ($39 USD)
+  window.open('https://pay.bitcoinacademy.online/apps/2ALJQkonyasAqzS7GXtgPKxzJSW1/pos','_blank');
+}
+
+// Auto-unlock if redirected from BTCPay with ?access=paid
+function showPdfBanner(){var b=document.getElementById('pdfBanner');if(b)b.style.display='flex'}
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  if(p.get('access')==='paid'){
+    document.getElementById('pw').classList.add('h');
+    showPdfBanner();
+    try{sessionStorage.setItem('btcacademy_advanced','paid')}catch(e){}
+  }else{
+    try{if(sessionStorage.getItem('btcacademy_advanced')==='paid'){document.getElementById('pw').classList.add('h');showPdfBanner()}}catch(e){}
+  }
+})();
 
 // LESSON COMPLETION
 var done=new Set();
