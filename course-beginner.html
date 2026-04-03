@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bitcoin Foundations — Beginner Course | Bitcoin Academy</title>
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --btc-orange: #F7931A;
@@ -828,218 +828,310 @@
   .certificate-container {
     display: none;
     margin: 2rem auto;
-    max-width: 650px;
+    max-width: 800px;
   }
-
   .certificate-container.show { display: block; }
 
   .certificate {
-    background: linear-gradient(145deg, #1a1712, #0f0d0a);
-    border: 2px solid var(--btc-orange);
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
-    text-align: center;
     position: relative;
+    width: 100%;
+    background: #111111;
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 0 60px rgba(247, 147, 26, 0.15), inset 0 0 60px rgba(247, 147, 26, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.8rem 3rem;
+    aspect-ratio: 1.414 / 1;
   }
-
   .certificate::before {
     content: '';
     position: absolute;
-    inset: 8px;
-    border: 1px solid rgba(247, 147, 26, 0.2);
-    border-radius: 14px;
+    inset: 12px;
+    border: 1.5px solid var(--btc-orange);
+    border-radius: 2px;
     pointer-events: none;
   }
-
   .certificate::after {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(from 0deg, transparent, rgba(247, 147, 26, 0.03), transparent, rgba(255, 184, 0, 0.03), transparent);
-    animation: certRotate 15s linear infinite;
+    inset: 18px;
+    border: 0.5px solid rgba(247, 147, 26, 0.3);
+    border-radius: 2px;
     pointer-events: none;
   }
-
-  @keyframes certRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+  .cert-corner {
+    position: absolute;
+    width: 50px; height: 50px;
+    pointer-events: none;
   }
-
-  .cert-badge {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.2rem;
-    background: rgba(247, 147, 26, 0.1);
-    border: 2px solid var(--btc-orange);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.2rem;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 30px rgba(247, 147, 26, 0.2);
+  .cert-corner svg { width: 100%; height: 100%; }
+  .cert-corner--tl { top: 22px; left: 22px; }
+  .cert-corner--tr { top: 22px; right: 22px; transform: scaleX(-1); }
+  .cert-corner--bl { bottom: 22px; left: 22px; transform: scaleY(-1); }
+  .cert-corner--br { bottom: 22px; right: 22px; transform: scale(-1, -1); }
+  .cert-watermark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px; height: 280px;
+    opacity: 0.055; pointer-events: none;
   }
-
-  .cert-pre {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .cert-title {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-size: 1.6rem;
-    margin-bottom: 0.3rem;
-    position: relative;
-    z-index: 1;
-    background: linear-gradient(135deg, var(--btc-orange), var(--btc-gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .cert-course {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--text-primary);
+  .cert-accent-bar {
+    width: 70px; height: 3px;
+    background: var(--btc-orange);
     margin-bottom: 1.2rem;
-    position: relative;
-    z-index: 1;
   }
-
-  .cert-name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: var(--text-primary);
-    border-bottom: 1px solid rgba(247, 147, 26, 0.3);
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
-    display: inline-block;
-    min-width: 200px;
-    position: relative;
-    z-index: 1;
+  .cert-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--btc-orange); margin-bottom: 0.4rem;
   }
-
-  .cert-date {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.8rem;
-    position: relative;
-    z-index: 1;
+  .cert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 600;
+    color: #FAF3E0; letter-spacing: 0.02em;
+    margin-bottom: 1rem; text-align: center; line-height: 1.15;
   }
-
-  .cert-score {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--accent-green);
-    margin-top: 0.3rem;
-    position: relative;
-    z-index: 1;
+  .cert-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 1.2rem;
   }
-
-  .cert-id {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    color: var(--text-muted);
-    margin-top: 1rem;
-    opacity: 0.5;
-    position: relative;
-    z-index: 1;
+  .cert-recipient-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 500;
+    color: #FFB84D; min-height: 2.8rem;
+    border-bottom: 1px solid rgba(247, 147, 26, 0.15);
+    padding-bottom: 0.3rem; min-width: 320px; text-align: center;
   }
-
-  .cert-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
   .cert-name-input {
-    background: transparent;
-    border: none;
+    background: transparent; border: none;
     border-bottom: 1px solid rgba(247, 147, 26, 0.3);
     color: var(--text-primary);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.4rem;
-    text-align: center;
-    padding: 0.3rem 0.5rem;
-    min-width: 200px;
-    outline: none;
-    position: relative;
-    z-index: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500; font-size: 1.2rem;
+    text-align: center; padding: 0.3rem 0.5rem;
+    min-width: 240px; outline: none; margin-top: 0.4rem;
   }
-  .cert-name-input::placeholder { color: var(--text-muted); font-weight: 400; font-size: 1rem; }
+  .cert-name-input::placeholder { color: var(--text-muted); font-weight: 400; font-size: 0.95rem; }
   .cert-name-input:focus { border-bottom-color: var(--btc-orange); }
+  .cert-description {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; font-weight: 400;
+    color: var(--text-secondary); text-align: center;
+    max-width: 480px; line-height: 1.7;
+    margin-top: 1rem; margin-bottom: 1.2rem;
+  }
+  .cert-course-badge {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--btc-orange);
+    background: rgba(247, 147, 26, 0.07);
+    padding: 0.45rem 1.5rem; border-radius: 3px;
+    border: 1px solid rgba(247, 147, 26, 0.15);
+    margin-bottom: 1.5rem;
+  }
+  .cert-footer {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    width: 100%; max-width: 600px;
+    margin-top: auto; padding-top: 0.5rem;
+  }
+  .cert-footer-col { text-align: center; min-width: 150px; }
+  .cert-footer-line {
+    width: 130px; height: 1px;
+    background: rgba(247, 147, 26, 0.15);
+    margin: 0 auto 0.4rem;
+  }
+  .cert-footer-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; color: var(--text-primary);
+    margin-bottom: 0.15rem;
+  }
+  .cert-footer-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.45rem; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .cert-logo-footer { display: flex; align-items: center; gap: 0.4rem; }
+  .cert-logo-footer svg { width: 18px; height: 18px; }
+  .cert-logo-footer span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .cert-actions {
+    display: flex; justify-content: center;
+    gap: 1rem; margin-top: 1.5rem;
+  }
 
+  /* ── PRINT ── */
   @media print {
-    /* Hide everything except the certificate */
-    body { background: #fff !important; }
-    body::before { display: none !important; }
-    nav, .sidebar, .progress-bar-container,
-    .course-content, .cert-actions, .quiz-section, .next-course-banner,
-    .lesson, .quiz-btn, .scroll-progress { display: none !important; }
-
-    .certificate-container { display: block !important; }
-    .certificate-container.show { display: block !important; }
-
-    .certificate {
-      display: block !important;
-      visibility: visible !important;
-      position: relative !important;
-      width: 700px !important;
-      margin: 0 auto !important;
-      padding: 3rem !important;
-      background: #1a1712 !important;
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    html, body {
+      width: 100%; height: 100%;
+      margin: 0; padding: 0;
+      background: #111111 !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
-      border: 3px solid #F7931A !important;
-      border-radius: 16px !important;
-      box-shadow: none !important;
-      overflow: visible !important;
+      overflow: hidden !important;
+    }
+    body::before { display: none !important; }
+
+    /* Hide everything except certificate */
+    nav, .sidebar, .progress-bar-container, .main-content .lesson,
+    .quiz-header, .quiz-progress, #quizContainer,
+    .quiz-results .results-score-ring,
+    .quiz-results .results-title, .quiz-results .results-desc,
+    .quiz-results .results-breakdown, .quiz-results .quiz-nav,
+    .cert-actions, .next-course-banner, .cert-name-input,
+    .scroll-progress { display: none !important; }
+
+    /* Reset layout wrappers */
+    .course-layout { padding-top: 0 !important; min-height: 0 !important; }
+    .main-content {
+      margin-left: 0 !important; padding: 0 !important;
+      max-width: none !important; width: 100% !important;
+    }
+    .quiz-section {
+      border-top: none !important;
+      margin: 0 !important; padding: 0 !important;
+    }
+    .quiz-results {
+      display: block !important;
+      padding: 0 !important;
+    }
+
+    /* Certificate fills the page */
+    .certificate-container {
+      display: block !important;
+      max-width: none !important;
+      margin: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+    .certificate {
+      width: 100vw !important;
+      height: 100vh !important;
+      aspect-ratio: unset !important;
+      border-radius: 0 !important;
+      background: #111111 !important;
+      margin: 0 !important;
+      padding: 4vh 6vw !important;
+    }
+
+    /* Scale up borders for print */
+    .certificate::before {
+      inset: 18px !important;
+      border: 2px solid #F7931A !important;
     }
     .certificate::after {
-      display: none !important;
+      inset: 26px !important;
+      border: 1px solid rgba(247, 147, 26, 0.3) !important;
     }
+    .cert-corner {
+      width: 70px !important;
+      height: 70px !important;
+    }
+    .cert-corner--tl { top: 30px !important; left: 30px !important; }
+    .cert-corner--tr { top: 30px !important; right: 30px !important; }
+    .cert-corner--bl { bottom: 30px !important; left: 30px !important; }
+    .cert-corner--br { bottom: 30px !important; right: 30px !important; }
+
+    /* Scale up text for print */
+    .cert-accent-bar {
+      width: 120px !important;
+      height: 4px !important;
+      background: #F7931A !important;
+      margin-bottom: 2.5vh !important;
+    }
+    .cert-label {
+      font-size: 1.1rem !important;
+      color: #F7931A !important;
+      margin-bottom: 1.5vh !important;
+      letter-spacing: 0.4em !important;
+    }
+    .cert-title {
+      font-size: 4.2rem !important;
+      color: #FAF3E0 !important;
+      margin-bottom: 3vh !important;
+    }
+    .cert-subtitle {
+      font-size: 1.5rem !important;
+      margin-bottom: 2.5vh !important;
+    }
+    .cert-recipient-display {
+      font-size: 3.8rem !important;
+      color: #FFB84D !important;
+      display: block !important;
+      min-width: 50% !important;
+      padding-bottom: 0.6rem !important;
+      margin-bottom: 0.6rem !important;
+    }
+    .cert-description {
+      font-size: 1.4rem !important;
+      margin-top: 2.5vh !important;
+      margin-bottom: 3vh !important;
+      max-width: 75% !important;
+    }
+    .cert-course-badge {
+      font-size: 1rem !important;
+      padding: 0.7rem 2.5rem !important;
+      color: #F7931A !important;
+      background: rgba(247, 147, 26, 0.07) !important;
+      border-color: rgba(247, 147, 26, 0.15) !important;
+      margin-bottom: 3.5vh !important;
+    }
+    .cert-watermark {
+      width: 450px !important;
+      height: 450px !important;
+      opacity: 0.06 !important;
+    }
+
+    /* Footer */
+    .cert-footer {
+      max-width: 85% !important;
+      padding-top: 1.5vh !important;
+    }
+    .cert-footer-col { min-width: 220px !important; }
+    .cert-footer-line {
+      width: 200px !important;
+      height: 1px !important;
+    }
+    .cert-footer-value {
+      font-size: 1.35rem !important;
+      color: #F0EDE6 !important;
+    }
+    .cert-footer-label {
+      font-size: 0.7rem !important;
+      letter-spacing: 0.25em !important;
+    }
+    .cert-logo-footer svg {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .cert-logo-footer span {
+      font-size: 0.85rem !important;
+    }
+
+    /* Force all colors */
     .certificate * {
-      visibility: visible !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
-    .cert-badge { font-size: 2.5rem !important; }
-    .cert-pre { color: #8A8697 !important; }
-    .cert-title {
-      background: none !important;
-      -webkit-text-fill-color: #F7931A !important;
-      color: #F7931A !important;
-    }
-    .cert-course { color: #F0EDE6 !important; }
-    .cert-name-input {
-      border: none !important;
-      color: #F7931A !important;
-      background: transparent !important;
-      font-size: 1.5rem !important;
-      text-align: center !important;
-    }
-    .cert-date, .cert-id { color: #8A8697 !important; }
-    .cert-score { color: #00D68F !important; }
   }
 
   .next-course-banner {
@@ -1375,14 +1467,35 @@
         <!-- CERTIFICATE -->
         <div class="certificate-container" id="certContainer">
           <div class="certificate">
-            <div class="cert-badge">🏆</div>
-            <div class="cert-pre">Certificate of Completion</div>
-            <div class="cert-title">Bitcoin Academy</div>
-            <div class="cert-course">Bitcoin Foundations — Beginner</div>
-            <input type="text" class="cert-name-input" id="certName" placeholder="Enter your name here">
-            <div class="cert-date" id="certDate"></div>
-            <div class="cert-score" id="certScore"></div>
-            <div class="cert-id" id="certId"></div>
+            <div class="cert-corner cert-corner--tl"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L2 30 Q2 2 30 2 Z" fill="none" stroke="#F7931A" stroke-width="1" opacity="0.5"/><path d="M8 8 L8 24 Q8 8 24 8" fill="none" stroke="#F7931A" stroke-width="0.5" opacity="0.3"/><circle cx="6" cy="6" r="1.5" fill="#F7931A" opacity="0.5"/></svg></div>
+            <div class="cert-corner cert-corner--tr"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L2 30 Q2 2 30 2 Z" fill="none" stroke="#F7931A" stroke-width="1" opacity="0.5"/><path d="M8 8 L8 24 Q8 8 24 8" fill="none" stroke="#F7931A" stroke-width="0.5" opacity="0.3"/><circle cx="6" cy="6" r="1.5" fill="#F7931A" opacity="0.5"/></svg></div>
+            <div class="cert-corner cert-corner--bl"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L2 30 Q2 2 30 2 Z" fill="none" stroke="#F7931A" stroke-width="1" opacity="0.5"/><path d="M8 8 L8 24 Q8 8 24 8" fill="none" stroke="#F7931A" stroke-width="0.5" opacity="0.3"/><circle cx="6" cy="6" r="1.5" fill="#F7931A" opacity="0.5"/></svg></div>
+            <div class="cert-corner cert-corner--br"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L2 30 Q2 2 30 2 Z" fill="none" stroke="#F7931A" stroke-width="1" opacity="0.5"/><path d="M8 8 L8 24 Q8 8 24 8" fill="none" stroke="#F7931A" stroke-width="0.5" opacity="0.3"/><circle cx="6" cy="6" r="1.5" fill="#F7931A" opacity="0.5"/></svg></div>
+            <svg class="cert-watermark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="none" stroke="#F7931A" stroke-width="1"/><path d="M38.5 24.5c2.5 1 4 3 3.5 5.5s-2.5 3.8-4.5 4c3 1 4.5 3.2 4 6s-3.5 4.5-7 4.5L34 48h-3l.5-3.5h-2L29 48h-3l.5-3.5-6-.5.5-3s2.2.3 2.2.1c1 0 1.2-.7 1.3-1l1.5-9.5c.1-.5 0-1.2-1.2-1.2 0-.2-2.1 0-2.1 0l.5-3 6.3.1L30 24h3l-.5 3.4h2L35 24h3l-.5 3c2.5.3 4.5 1 5 2.5zM30.5 33h2.5c2 0 3.5-.5 3.8-2.2s-1-2.5-3-2.8h-2.5l-.8 5zm-1 7h3c2.2 0 4-.5 4.3-2.5s-1.5-2.8-3.5-3h-3l-.8 5.5z" fill="#F7931A"/></svg>
+            <div class="cert-accent-bar"></div>
+            <div class="cert-label">Bitcoin Academy</div>
+            <div class="cert-title">Certificate of Completion</div>
+            <div class="cert-subtitle">This is to certify that</div>
+            <div class="cert-recipient-display" id="certRecipientDisplay">Your Name Here</div>
+            <input type="text" class="cert-name-input" id="certName" placeholder="Enter your full name">
+            <p class="cert-description">has successfully completed all lessons and passed the final assessment for the following course at Bitcoin Academy</p>
+            <div class="cert-course-badge">Bitcoin Foundations — Beginner Course</div>
+            <div class="cert-footer">
+              <div class="cert-footer-col">
+                <div class="cert-footer-line"></div>
+                <div class="cert-footer-value" id="certDate">—</div>
+                <div class="cert-footer-label">Date of Completion</div>
+              </div>
+              <div class="cert-logo-footer">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="none" stroke="#F7931A" stroke-width="2"/><path d="M38.5 24.5c2.5 1 4 3 3.5 5.5s-2.5 3.8-4.5 4c3 1 4.5 3.2 4 6s-3.5 4.5-7 4.5L34 48h-3l.5-3.5h-2L29 48h-3l.5-3.5-6-.5.5-3s2.2.3 2.2.1c1 0 1.2-.7 1.3-1l1.5-9.5c.1-.5 0-1.2-1.2-1.2 0-.2-2.1 0-2.1 0l.5-3 6.3.1L30 24h3l-.5 3.4h2L35 24h3l-.5 3c2.5.3 4.5 1 5 2.5zM30.5 33h2.5c2 0 3.5-.5 3.8-2.2s-1-2.5-3-2.8h-2.5l-.8 5zm-1 7h3c2.2 0 4-.5 4.3-2.5s-1.5-2.8-3.5-3h-3l-.8 5.5z" fill="#F7931A"/></svg>
+                <span>bitcoinacademy.online</span>
+              </div>
+              <div class="cert-footer-col">
+                <div class="cert-footer-line"></div>
+                <div class="cert-footer-value" id="certIdDisplay">—</div>
+                <div class="cert-footer-label">Certificate ID</div>
+              </div>
+            </div>
           </div>
           <div class="cert-actions">
             <button class="quiz-btn quiz-btn-ghost" onclick="printCert()">🖨️ Print Certificate</button>
@@ -1663,17 +1776,22 @@
       document.getElementById('resultsTitle').textContent = '🎉 Congratulations!';
       document.getElementById('resultsDesc').textContent = `You scored ${score}/${quizQuestions.length} and passed the Bitcoin Foundations course! You now have a solid understanding of Bitcoin basics.`;
 
-      // Show certificate
       const now = new Date();
       const dateStr = now.toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
-      const certId = 'BTC-FND-' + now.getFullYear() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let certId = 'BA-BEG-';
+      for (let i = 0; i < 8; i++) certId += chars.charAt(Math.floor(Math.random() * chars.length));
 
-      document.getElementById('certName').placeholder = 'Enter your name here';
-      document.getElementById('certDate').textContent = 'Completed: ' + dateStr;
-      document.getElementById('certScore').textContent = `Score: ${pct}% (${score}/${quizQuestions.length})`;
-      document.getElementById('certId').textContent = 'Certificate ID: ' + certId;
+      document.getElementById('certDate').textContent = dateStr;
+      document.getElementById('certIdDisplay').textContent = certId;
       document.getElementById('certContainer').classList.add('show');
       document.getElementById('nextCourseBanner').classList.add('show');
+
+      const nameInput = document.getElementById('certName');
+      const nameDisplay = document.getElementById('certRecipientDisplay');
+      nameInput.addEventListener('input', function() {
+        nameDisplay.textContent = this.value || 'Your Name Here';
+      });
     } else {
       document.getElementById('resultsTitle').textContent = 'Almost There!';
       document.getElementById('resultsDesc').textContent = `You scored ${score}/${quizQuestions.length}. You need 70% to pass. Review the lessons and try again — you've got this!`;
@@ -1700,6 +1818,7 @@
       setTimeout(function() { nameInput.style.borderBottomColor = ''; }, 2000);
       return;
     }
+    document.getElementById('certRecipientDisplay').textContent = nameInput.value.trim();
     window.print();
   }
 
