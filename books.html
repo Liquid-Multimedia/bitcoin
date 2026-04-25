@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>Bitcoin Books | Bitcoin Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --o:#F7931A;--g:#FFB800;--dk:#0A0A0F;--de:#06060A;--sf:#111118;--sl:#1A1A24;--sh:#22222E;
+  --t1:#F0EDE6;--t2:#8A8697;--tm:#5A566A;--gn:#00D68F;--bl:#4A9EFF;--fd:'Anybody',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--dk);color:var(--t1);line-height:1.65}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--de)}::-webkit-scrollbar-thumb{background:var(--o);border-radius:3px}
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,10,15,.85);border-bottom:1px solid rgba(247,147,26,.1)}
+.logo{font-family:var(--fd);font-weight:900;font-size:1.35rem;color:var(--o);letter-spacing:-.5px;display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.logo-icon{width:32px;height:32px;background:var(--o);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--dk);font-weight:900}
+.nr{display:flex;align-items:center;gap:1.2rem}
+.nb{color:var(--t2);text-decoration:none;font-size:.85rem;transition:color .25s}
+.nb:hover{color:var(--o)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:6.5rem 2rem 4rem}
+.hero{padding:2.2rem;border:1px solid rgba(247,147,26,.15);border-radius:24px;background:linear-gradient(135deg,rgba(247,147,26,.12),rgba(26,26,36,.9));margin-bottom:2rem}
+.tag{display:inline-flex;align-items:center;gap:.4rem;border:1px solid rgba(247,147,26,.35);padding:.35rem .8rem;border-radius:999px;font-family:var(--fm);font-size:.72rem;letter-spacing:1px;color:var(--o);text-transform:uppercase}
+.hero h1{font-family:var(--fd);font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-1px;line-height:1.1;margin:1rem 0 .8rem}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{max-width:840px;color:var(--t2)}
+.hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;padding:.75rem 1.2rem;border-radius:12px;font-size:.9rem;font-weight:700;transition:all .25s}
+.btn-primary{background:linear-gradient(135deg,var(--o),var(--g));color:var(--dk)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(247,147,26,.25)}
+.btn-ghost{border:1px solid rgba(247,147,26,.35);color:var(--o)}
+.btn-ghost:hover{background:rgba(247,147,26,.08)}
+
+.section-title{font-family:var(--fd);font-size:1.6rem;margin:2rem 0 1rem}
+.section-title em{font-style:normal;color:var(--o)}
+.books-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+.book{background:var(--sf);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:1.1rem;transition:all .25s}
+.book:hover{border-color:rgba(247,147,26,.2);transform:translateY(-2px)}
+.book-cover{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.1);margin-bottom:.8rem;background:var(--sl)}
+.meta{font-family:var(--fm);font-size:.68rem;color:var(--tm);letter-spacing:1px;text-transform:uppercase}
+.book h3{font-family:var(--fd);font-size:1.12rem;margin:.45rem 0}
+.author{color:var(--t2);font-size:.9rem;margin-bottom:.8rem}
+.chips{display:flex;gap:.45rem;flex-wrap:wrap}
+.chip{font-size:.72rem;padding:.25rem .55rem;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:var(--t2)}
+.chip.ok{border-color:rgba(0,214,143,.3);color:var(--gn)}
+.book-links{margin-top:.9rem}
+.buy-link{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:.62rem .9rem;border-radius:10px;text-decoration:none;background:linear-gradient(135deg,var(--o),var(--g));color:var(--dk);font-weight:700;font-size:.86rem;transition:all .2s}
+.buy-link:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(247,147,26,.25)}
+
+.outreach{margin-top:2rem;background:var(--sf);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:1rem;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:920px}
+th,td{padding:.72rem .6rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+th{font-family:var(--fm);font-size:.7rem;letter-spacing:1px;color:var(--tm);text-transform:uppercase}
+td{font-size:.9rem}
+.contact-links a{font-size:.78rem;color:var(--o);text-decoration:none;margin-right:.55rem}
+.contact-links a:hover{text-decoration:underline}
+
+.footer-note{margin-top:2rem;padding:1rem;border-radius:12px;background:var(--sl);font-size:.86rem;color:var(--t2)}
+.footer-note b{color:var(--t1)}
+@media(max-width:720px){nav{padding:1rem}.nr{gap:.8rem}.wrap{padding:6rem 1rem 3rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">₿</div>Bitcoin <span style="color:var(--t1)">Academy</span></a>
+  <div class="nr">
+    <a href="dashboard.html" class="nb">Dashboard</a>
+    <a href="index.html" class="nb">← Home</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="tag">Bitcoin Books Hub</span>
+    <h1>Popular <em>Bitcoin Books</em> by Leading Voices</h1>
+    <div class="hero-actions">
+      <a href="#books" class="btn btn-primary">Browse Books</a>
+      <a href="#outreach" class="btn btn-ghost">Author Outreach Tracker</a>
+    </div>
+  </section>
+
+  <section id="books">
+    <h2 class="section-title">Featured <em>Book List</em></h2>
+    <div class="books-grid">
+      <article class="book"><img class="book-cover" loading="lazy" src="https://m.media-amazon.com/images/I/71jDLpPMdFS._SL1500_.jpg" alt="The Bitcoin Standard cover"><div class="meta">Monetary Theory</div><h3>The Bitcoin Standard</h3><p class="author">Saifedean Ammous</p><div class="chips"><span class="chip">Beginner Friendly</span><span class="chip ok">High Demand</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1119473861" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/9798988666318-L.jpg" alt="Broken Money cover"><div class="meta">Macro + Policy</div><h3>Broken Money</h3><p class="author">Lyn Alden</p><div class="chips"><span class="chip">Intermediate</span><span class="chip ok">Top Seller</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/B0CG8985FR" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1491954388-L.jpg" alt="Mastering Bitcoin cover"><div class="meta">Technical Foundations</div><h3>Mastering Bitcoin</h3><p class="author">Andreas M. Antonopoulos</p><div class="chips"><span class="chip">Developer</span><span class="chip ok">Evergreen</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1491954388" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1794326316-L.jpg" alt="Inventing Bitcoin cover"><div class="meta">Quick Primer</div><h3>Inventing Bitcoin</h3><p class="author">Yan Pritzker</p><div class="chips"><span class="chip">Beginner</span><span class="chip">Short Read</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1794326316" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1736110527-L.jpg" alt="Layered Money cover"><div class="meta">Economics</div><h3>Layered Money</h3><p class="author">Nik Bhatia</p><div class="chips"><span class="chip">Intermediate</span><span class="chip">Finance</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1736110527" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1697526349-L.jpg" alt="21 Lessons cover"><div class="meta">Bitcoin Philosophy</div><h3>21 Lessons</h3><p class="author">Gigi</p><div class="chips"><span class="chip">Mindset</span><span class="chip">Culture</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1697526349" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1544526474-L.jpg" alt="The Fiat Standard cover"><div class="meta">Bitcoin Critique + Fiat</div><h3>The Fiat Standard</h3><p class="author">Saifedean Ammous</p><div class="chips"><span class="chip">Advanced</span><span class="chip">Macro</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1544526474" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/0062362496-L.jpg" alt="Digital Gold cover"><div class="meta">History + Story</div><h3>Digital Gold</h3><p class="author">Nathaniel Popper</p><div class="chips"><span class="chip">Narrative</span><span class="chip">Popular</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/s?k=Digital+Gold+Nathaniel+Popper" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://m.media-amazon.com/images/I/41tvJ8RB8XL._SL1500_.jpg" alt="The Big Print cover"><div class="meta">Macro + Inflation</div><h3>The Big Print</h3><p class="author">Lawrence Lepard</p><div class="chips"><span class="chip">Macro</span><span class="chip">New Addition</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/B0DVTCVX8J" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://covers.openlibrary.org/b/isbn/1999257405-L.jpg" alt="The Price of Tomorrow cover"><div class="meta">Technology + Deflation</div><h3>The Price of Tomorrow</h3><p class="author">Jeff Booth</p><div class="chips"><span class="chip">Economics</span><span class="chip">New Addition</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1999257405" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://m.media-amazon.com/images/I/31pZe-oH2WL._SY445_SX342_.jpg" alt="Everything Divided by 21 Million cover"><div class="meta">Bitcoin Philosophy</div><h3>Everything Divided by 21 Million</h3><p class="author">Knut Svanholm</p><div class="chips"><span class="chip">Scarcity</span><span class="chip">New Addition</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/9916425337" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+      <article class="book"><img class="book-cover" loading="lazy" src="https://m.media-amazon.com/images/I/81xsNSSfthL._SY385_.jpg" alt="Bitcoin Billionaires cover"><div class="meta">Bitcoin History</div><h3>Bitcoin Billionaires</h3><p class="author">Ben Mezrich</p><div class="chips"><span class="chip">Narrative</span><span class="chip">New Addition</span></div><div class="book-links"><a class="buy-link" href="https://www.amazon.com/dp/1250217741" target="_blank" rel="noopener noreferrer nofollow sponsored">Buy on Amazon</a></div></article>
+    </div>
+  </section>
+
+  <section id="outreach">
+    <h2 class="section-title">Author <em>Outreach Tracker</em></h2>
+    <div class="outreach">
+      <table>
+        <thead><tr><th>Book</th><th>Author</th><th>Socials</th><th>Amazon</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>The Bitcoin Standard</td><td>Saifedean Ammous</td><td class="contact-links"><a href="https://x.com/saifedean" target="_blank" rel="noopener noreferrer">X</a><a href="https://saifedean.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1119473861" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A clear introduction to sound money and why Bitcoin matters globally.</td></tr>
+          <tr><td>Broken Money</td><td>Lyn Alden</td><td class="contact-links"><a href="https://x.com/LynAldenContact" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.lynalden.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/B0CG8985FR" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A deep look at monetary history, technology, and modern financial system failures.</td></tr>
+          <tr><td>Mastering Bitcoin</td><td>Andreas Antonopoulos</td><td class="contact-links"><a href="https://x.com/aantonop" target="_blank" rel="noopener noreferrer">X</a><a href="https://aantonop.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1491954388" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>The technical handbook for developers building and learning on Bitcoin.</td></tr>
+          <tr><td>Inventing Bitcoin</td><td>Yan Pritzker</td><td class="contact-links"><a href="https://x.com/skwp" target="_blank" rel="noopener noreferrer">X</a><a href="https://swan.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1794326316" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A concise beginner-friendly explanation of Bitcoin’s core mechanics.</td></tr>
+          <tr><td>Layered Money</td><td>Nik Bhatia</td><td class="contact-links"><a href="https://x.com/timevalueofbtc" target="_blank" rel="noopener noreferrer">X</a><a href="https://layeredmoney.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1736110527" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>Explains how money evolved in layers from gold to dollars to Bitcoin.</td></tr>
+          <tr><td>21 Lessons</td><td>Gigi</td><td class="contact-links"><a href="https://x.com/dergigi" target="_blank" rel="noopener noreferrer">X</a><a href="https://dergigi.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1697526349" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A philosophical journey through key ideas learned from the Bitcoin rabbit hole.</td></tr>
+          <tr><td>The Fiat Standard</td><td>Saifedean Ammous</td><td class="contact-links"><a href="https://x.com/saifedean" target="_blank" rel="noopener noreferrer">X</a><a href="https://saifedean.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/1544526474" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>An analysis of fiat money, debt expansion, and Bitcoin as an alternative.</td></tr>
+          <tr><td>Digital Gold</td><td>Nathaniel Popper</td><td class="contact-links"><a href="https://x.com/nathanielpopper" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.amazon.com/stores/author/B00PGLE6BM" target="_blank" rel="noopener noreferrer">Author Page</a></td><td><a href="https://www.amazon.com/s?k=Digital+Gold+Nathaniel+Popper" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A narrative history of Bitcoin’s early pioneers, conflicts, and growth.</td></tr>
+          <tr><td>The Big Print</td><td>Lawrence Lepard</td><td class="contact-links"><a href="https://x.com/LawrenceLepard" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.thebigprintbook.com/lawrence/" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/B0DVTCVX8J" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A plain-language case for sound money and protecting wealth from inflation.</td></tr>
+          <tr><td>The Price of Tomorrow</td><td>Jeff Booth</td><td class="contact-links"><a href="https://x.com/JeffBooth" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.amazon.com/stores/author/B0821YB2QM" target="_blank" rel="noopener noreferrer">Author Page</a></td><td><a href="https://www.amazon.com/dp/1999257405" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>Why technology drives deflation and challenges inflation-based economic systems.</td></tr>
+          <tr><td>Everything Divided by 21 Million</td><td>Knut Svanholm</td><td class="contact-links"><a href="https://x.com/knutsvanholm" target="_blank" rel="noopener noreferrer">X</a><a href="https://knutsvanholm.com" target="_blank" rel="noopener noreferrer">Website</a></td><td><a href="https://www.amazon.com/dp/9916425337" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A short, reflective Bitcoin book focused on scarcity, time, and value.</td></tr>
+          <tr><td>Bitcoin Billionaires</td><td>Ben Mezrich</td><td class="contact-links"><a href="https://x.com/benmezrich" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.amazon.com/stores/author/B001H6OGU6" target="_blank" rel="noopener noreferrer">Author Page</a></td><td><a href="https://www.amazon.com/dp/1250217741" target="_blank" rel="noopener noreferrer nofollow sponsored">Amazon Link</a></td><td>A fast-paced story about the Winklevoss twins and Bitcoin’s early rise.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="footer-note"><b>Disclosure:</b> As an affiliate, Bitcoin Academy may earn commissions from qualifying purchases made through links on this page. This does not change our editorial curation.</p>
+</main>
+</body>
+</html>
