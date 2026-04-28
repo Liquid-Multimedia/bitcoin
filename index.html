@@ -1868,6 +1868,7 @@
 
   // Newsletter signup
   function handleSubscribe() {
+    const subscribeEmail = 'btcacademy@protonmail.com';
     const name = document.getElementById('firstName').value.trim();
     const email = document.getElementById('email').value.trim();
     const level = document.getElementById('level').value;
@@ -1881,6 +1882,12 @@
       alert('Please enter a valid email address.');
       return;
     }
+
+    const subject = encodeURIComponent('Bitcoin Academy newsletter signup');
+    const body = encodeURIComponent(
+      `New Bitcoin Academy signup:\n\nName: ${name}\nEmail: ${email}\nExperience level: ${level}`
+    );
+    window.location.href = `mailto:${subscribeEmail}?subject=${subject}&body=${body}`;
 
     document.getElementById('signupForm').style.display = 'none';
     document.getElementById('successMsg').classList.add('show');
