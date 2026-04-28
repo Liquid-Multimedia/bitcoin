@@ -1787,8 +1787,8 @@
         </div>
         <div class="success-message" id="successMsg">
           <div class="success-icon">🎉</div>
-          <h3>You're In!</h3>
-          <p>Welcome to Bitcoin Academy. Check your inbox for a confirmation and your first lesson.</p>
+          <h3>Almost There!</h3>
+          <p>Your email app should open with a pre-filled signup message. If it doesn't, email <a id="fallbackEmailLink" href="mailto:btcacademy@protonmail.com" style="color: var(--btc-orange);">btcacademy@protonmail.com</a> and we'll add you manually.</p>
         </div>
       </div>
     </div>
@@ -1883,14 +1883,22 @@
       return;
     }
 
-    const subject = encodeURIComponent('Bitcoin Academy newsletter signup');
-    const body = encodeURIComponent(
+    const subjectText = 'Bitcoin Academy newsletter signup';
+    const bodyText =
       `New Bitcoin Academy signup:\n\nName: ${name}\nEmail: ${email}\nExperience level: ${level}`
-    );
-    window.location.href = `mailto:${subscribeEmail}?subject=${subject}&body=${body}`;
+    ;
+    const mailtoLink = `mailto:${subscribeEmail}?subject=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
+    document.getElementById('fallbackEmailLink').href = mailtoLink;
 
     document.getElementById('signupForm').style.display = 'none';
     document.getElementById('successMsg').classList.add('show');
+
+    const mailLink = document.createElement('a');
+    mailLink.href = mailtoLink;
+    mailLink.style.display = 'none';
+    document.body.appendChild(mailLink);
+    mailLink.click();
+    document.body.removeChild(mailLink);
   }
 
   // Uptime counter
