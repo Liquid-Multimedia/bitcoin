@@ -216,6 +216,30 @@
     animation: fadeUp 1s ease-out 0.4s both;
   }
 
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem 1.2rem;
+    margin: 0 0 2rem;
+    animation: fadeUp 1s ease-out 0.35s both;
+  }
+
+  .hero-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .hero-links a:hover {
+    color: var(--btc-orange);
+    border-color: rgba(247, 147, 26, 0.55);
+  }
+
   .hero-cta {
     display: flex;
     gap: 1rem;
@@ -1292,17 +1316,8 @@
     Bitcoin <span style="color: var(--text-primary);">Academy</span>
   </div>
   <ul class="nav-links">
-    <li><a href="#what">What</a></li>
-    <li><a href="#concepts">Concepts</a></li>
-    <li><a href="#history">History</a></li>
-    <li><a href="#mining">Mining</a></li>
-    <li><a href="#halving">Halving</a></li>
-    <li><a href="#myths">Myths</a></li>
-    <li><a href="dashboard.html" target="_blank">Dashboard</a></li>
     <li><a href="books.html">Books</a></li>
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#newsletter">Newsletter</a></li>
-    <li><a href="#glossary">Glossary</a></li>
+    <li><a href="dashboard.html" target="_blank">Live Dashboard</a></li>
   </ul>
 </nav>
 
@@ -1314,6 +1329,17 @@
     Open-Source Money
   </div>
   <h1><span style="font-size: 0.55em; display: block; letter-spacing: 2px; -webkit-text-fill-color: var(--text-primary);">Understanding</span><span>Bitcoin</span></h1>
+  <div class="hero-links">
+    <a href="#what">What</a>
+    <a href="#concepts">Concepts</a>
+    <a href="#history">History</a>
+    <a href="#mining">Mining</a>
+    <a href="#halving">Halving</a>
+    <a href="#myths">Myths</a>
+    <a href="#courses">Courses</a>
+    <a href="#newsletter">Newsletter</a>
+    <a href="#glossary">Glossary</a>
+  </div>
   <p class="hero-sub">A comprehensive, beginner-friendly guide to the world's first decentralised digital currency — how it works, why it matters, and what you need to know.</p>
   <div class="hero-cta">
     <a href="#what" class="btn btn-primary">Start Learning</a>
