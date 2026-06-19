@@ -84,7 +84,7 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
     <!-- PRICE CHART -->
     <div class="cc fw">
       <div class="ch">
-        <div><div class="ct" id="ptitle">Price History (1 Year)</div><div class="cs">USD daily close · CoinGecko</div></div>
+        <div><div class="ct" id="ptitle">Price History (1 Year)</div><div class="cs">USD daily close · Blockchain.com</div></div>
         <div class="ts" id="ptf">
           <button class="tb" data-d="7">1W</button><button class="tb" data-d="30">1M</button>
           <button class="tb" data-d="90">3M</button><button class="tb" data-d="180">6M</button>
@@ -170,7 +170,7 @@ nav{position:fixed;top:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;
     </div>
   </div>
 
-  <div class="disc">CoinGecko · Mempool.space · Alternative.me — Stats refresh 60s<br>Educational only · Bitcoin Academy © 2026</div>
+  <div class="disc">CoinGecko · Blockchain.com · Mempool.space · Alternative.me — Stats refresh 60s<br>Educational only · Bitcoin Academy © 2026</div>
 </div>
 
 <script>
@@ -183,7 +183,7 @@ Chart.defaults.font.family = "'DM Sans',sans-serif";
 
 var O='#F7931A', G='#FFB800', GN='#00D68F', RD='#FF4D6A', BL='#4A9EFF', MT='#5A566A';
 var TFL = {'7':'1 Week','30':'1 Month','90':'3 Months','180':'6 Months','365':'1 Year','1825':'5 Years','max':'All Time'};
-var allData = null;  // Cache the full CoinGecko price history
+var allData = null;  // Cache full BTC price history for charts
 var ci = {};         // Chart instances
 
 function $(id) { return document.getElementById(id); }
@@ -199,7 +199,8 @@ function api(u) {
 
 // ══════════════════════════
 //  LOAD ALL CHART DATA (one request, cached forever)
-//  CoinGecko market_chart/range → full BTC history
+//  Blockchain.com charts API (CORS-enabled, full history)
+//  CoinGecko market_chart fallback (free tier: last 365 days only)
 // ══════════════════════════
 function normalizePrices(prices) {
   return prices
@@ -209,18 +210,25 @@ function normalizePrices(prices) {
 
 function loadAllChartData(callback) {
   if (allData) { callback(allData); return; }
-  var genesis = Math.floor(new Date('2009-01-03').getTime() / 1000);
-  var now = Math.floor(Date.now() / 1000);
-  var rangeUrl = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=' + genesis + '&to=' + now;
-  var maxUrl = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max&interval=daily';
+  var bcUrl = 'https://api.blockchain.info/charts/market-price?timespan=all&format=json&sampled=false&cors=true';
+  var cgUrl = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily';
 
-  api(rangeUrl).then(function(res) {
-    if (res && res.prices && res.prices.length) return res;
-    return api(maxUrl);
-  }).then(function(res) {
-    if (!res || !res.prices || !res.prices.length) return;
-    allData = normalizePrices(res.prices);
-    callback(allData);
+  api(bcUrl).then(function(res) {
+    if (res && res.values && res.values.length) {
+      allData = res.values
+        .filter(function(v) { return v.y > 0; })
+        .map(function(v) { return [v.x * 1000, v.y]; });
+      callback(allData);
+      return;
+    }
+    return api(cgUrl).then(function(cg) {
+      if (!cg || !cg.prices || !cg.prices.length) {
+        $('lu').textContent = 'Chart data unavailable — try refreshing';
+        return;
+      }
+      allData = normalizePrices(cg.prices);
+      callback(allData);
+    });
   });
 }
 
